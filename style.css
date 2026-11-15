@@ -36,6 +36,171 @@ nav a:focus-visible {
   color: #8b5cf6;
 }
 
+/* Active section: subtle purple underline */
+nav a {
+  position: relative;
+}
+
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.35rem;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #8b5cf6;
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+nav a.is-active::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Leave a little breathing room above a section when jumping to it */
+section[id] {
+  scroll-margin-top: 1.5rem;
+}
+
+/* Hamburger button: hidden on desktop */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0 0.6rem;
+  border: 1px solid #333333;
+  border-radius: 6px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.nav-toggle:hover,
+.nav-toggle:focus-visible {
+  border-color: #8b5cf6;
+}
+
+.nav-toggle:focus-visible {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.nav-toggle-bar {
+  display: block;
+  height: 2px;
+  border-radius: 1px;
+  background-color: #ffffff;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* Bars turn into an X when open */
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 820px) {
+  header {
+    flex-wrap: wrap;
+    padding: 1rem 1.5rem;
+  }
+
+  .logo {
+    font-size: 1.15rem;
+  }
+
+  /* Without JS the links simply wrap below the logo */
+  nav {
+    flex: 1 0 100%;
+    margin-top: 0.75rem;
+  }
+
+  nav ul {
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+  }
+
+  /* With JS: compact dropdown that pushes the page down instead of covering it */
+  .js .nav-toggle {
+    display: flex;
+  }
+
+  .js nav {
+    display: grid;
+    grid-template-rows: 0fr;
+    margin-top: 0;
+    visibility: hidden;
+    transition: grid-template-rows 0.3s ease, margin-top 0.3s ease, visibility 0s linear 0.3s;
+  }
+
+  .js nav.is-open {
+    grid-template-rows: 1fr;
+    margin-top: 0.75rem;
+    visibility: visible;
+    transition: grid-template-rows 0.3s ease, margin-top 0.3s ease, visibility 0s;
+  }
+
+  .js nav ul {
+    flex-direction: column;
+    gap: 0;
+    min-height: 0;
+    overflow: hidden;
+    border-top: 1px solid #262626;
+  }
+
+  .js nav li {
+    border-bottom: 1px solid #262626;
+  }
+
+  .js nav a {
+    display: block;
+    padding: 0.8rem 0.25rem;
+  }
+
+  /* In the dropdown, mark the active link with a left bar instead of an underline */
+  .js nav a::after {
+    left: 0;
+    right: auto;
+    top: 0.7rem;
+    bottom: 0.7rem;
+    width: 2px;
+    height: auto;
+    transform: scaleY(0.4);
+  }
+
+  .js nav a.is-active::after {
+    transform: scaleY(1);
+  }
+
+  .js nav a.is-active {
+    padding-left: 0.75rem;
+  }
+}
+
+/* Used for an instant close (e.g. after tapping a link), so the scroll target isn't thrown off */
+.js nav.no-anim {
+  transition: none !important;
+}
+
 .hero {
   display: flex;
   align-items: center;
@@ -638,6 +803,328 @@ nav a:focus-visible {
 
   .lightbox-caption {
     font-size: 0.85rem;
+  }
+}
+
+/* Services */
+.services {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem 8rem;
+}
+
+.services h2 {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #8b5cf6;
+  display: inline-block;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.service-card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid #262626;
+  border-left: 2px solid #8b5cf6;
+  border-radius: 8px;
+  padding: 1.5rem 1.75rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.service-card:hover {
+  border-color: #333333;
+  border-left-color: #8b5cf6;
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.08);
+  transform: translateY(-2px);
+}
+
+.service-card h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.6rem;
+}
+
+.service-card p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #bbbbbb;
+  margin: 0;
+}
+
+.services-closing {
+  max-width: 620px;
+  margin: 2rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #cccccc;
+}
+
+@media (max-width: 768px) {
+  .services {
+    padding: 0 1.5rem 5rem;
+  }
+
+  .services h2 {
+    font-size: 1.75rem;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .service-card {
+    padding: 1.25rem;
+  }
+}
+
+/* Pricing */
+.pricing {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem 8rem;
+}
+
+.pricing h2 {
+  font-size: 2rem;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #8b5cf6;
+  display: inline-block;
+}
+
+.pricing-intro p {
+  max-width: 620px;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: #cccccc;
+  margin: 0 0 1rem;
+}
+
+.pricing-dev {
+  margin-top: 2rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.price-card {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid #262626;
+  border-top: 2px solid #8b5cf6;
+  border-radius: 8px;
+  padding: 1.5rem 1.75rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.price-card:hover {
+  border-color: #333333;
+  border-top-color: #8b5cf6;
+  box-shadow: 0 8px 30px rgba(139, 92, 246, 0.08);
+}
+
+.price-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-bottom: 0.6rem;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 50%;
+  color: #8b5cf6;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.pricing h3 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+
+.price-card-desc {
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #aaaaaa;
+}
+
+.price-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.price-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid #262626;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  color: #d4d4d4;
+}
+
+.price {
+  white-space: nowrap;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.price-list .price {
+  flex: 0 0 auto;
+}
+
+.price-note {
+  margin: 1rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #8f8f8f;
+}
+
+/* Optional add-on, visually attached beneath both development cards */
+.price-addon {
+  position: relative;
+  margin-top: 1.75rem;
+  padding: 1.6rem 1.75rem 1.4rem;
+  border: 1px dashed rgba(139, 92, 246, 0.45);
+  border-radius: 8px;
+  background-color: rgba(139, 92, 246, 0.04);
+}
+
+.price-addon-plus {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #7c3aed;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.price-addon > p {
+  max-width: 680px;
+  margin: 0 0 0.9rem;
+  font-size: 0.98rem;
+  line-height: 1.6;
+  color: #cccccc;
+}
+
+.price-addon > .price-note {
+  margin: 1.1rem 0 0;
+  font-size: 0.88rem;
+  color: #8f8f8f;
+}
+
+.price-addon .feature-list,
+.hosting-card .feature-list,
+.payment-info .feature-list {
+  padding-bottom: 0;
+}
+
+.price-addon .feature-list li,
+.hosting-card .feature-list li,
+.payment-info .feature-list li {
+  font-size: 0.98rem;
+  color: #cccccc;
+}
+
+/* Hosting: separate from development */
+.hosting-card {
+  margin-top: 3rem;
+}
+
+.hosting-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin-bottom: 1.1rem;
+}
+
+.hosting-head .price-card-desc {
+  margin-bottom: 0;
+}
+
+.hosting-price {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #aaaaaa;
+}
+
+.hosting-price .price {
+  font-size: 1.6rem;
+  color: #8b5cf6;
+}
+
+.hosting-list {
+  columns: 2;
+  column-gap: 2rem;
+}
+
+.hosting-list li {
+  break-inside: avoid;
+}
+
+/* Payment */
+.payment-info {
+  margin-top: 2.5rem;
+}
+
+.payment-info h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.payment-info h3 .price-step {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .pricing {
+    padding: 0 1.5rem 5rem;
+  }
+
+  .pricing h2 {
+    font-size: 1.75rem;
+  }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .price-card,
+  .price-addon {
+    padding: 1.25rem;
+  }
+
+  .price-addon {
+    padding-top: 1.6rem;
+  }
+
+  .hosting-list {
+    columns: 1;
   }
 }
 

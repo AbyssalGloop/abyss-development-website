@@ -97,3 +97,95 @@ if (lightbox && typeof lightbox.showModal === 'function' && mediaItems.length) {
     if (opener) opener.focus();
   });
 }
+
+// Mobile navigation menu
+const navToggle = document.querySelector('.nav-toggle');
+const siteNav = document.getElementById('site-nav');
+
+if (navToggle && siteNav) {
+  const setMenu = (open, instant = false) => {
+    if (instant) siteNav.classList.add('no-anim');
+    siteNav.classList.toggle('is-open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (instant) {
+      void siteNav.offsetHeight; // apply the closed layout before the browser scrolls to the link target
+      siteNav.classList.remove('no-anim');
+    }
+  };
+
+  navToggle.addEventListener('click', () => {
+    setMenu(navToggle.getAttribute('aria-expanded') !== 'true');
+  });
+
+  // Close after choosing a section
+  siteNav.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (siteNav.classList.contains('is-open')) setMenu(false, true);
+    });
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && siteNav.classList.contains('is-open')) {
+      setMenu(false);
+      navToggle.focus();
+    }
+  });
+
+  // Reset when the window is widened back to the desktop layout
+  window.matchMedia('(min-width: 821px)').addEventListener('change', (event) => {
+    if (event.matches) setMenu(false, true);
+  });
+}
+
+// Highlight the nav link for the section currently in view
+const navLinks = Array.from(document.querySelectorAll('#site-nav a'));
+// The first "#" link (Home) maps to the hero; other "#" placeholders (e.g. Contact, until it has a section) are skipped.
+let homeMapped = false;
+const trackedSections = navLinks
+  .map((link) => {
+    const href = link.getAttribute('href');
+    let section = null;
+    if (href === '#') {
+      if (!homeMapped) { section = document.querySelector('.hero'); homeMapped = true; }
+    } else if (href && href.length > 1) {
+      section = document.querySelector(href);
+    }
+    return section ? { link, section } : null;
+  })
+  .filter(Boolean);
+
+if (trackedSections.length) {
+  let ticking = false;
+
+  const updateActive = () => {
+    ticking = false;
+    const marker = window.innerHeight * 0.35;
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current = trackedSections[0];
+
+    if (atBottom) {
+      current = trackedSections[trackedSections.length - 1];
+    } else {
+      trackedSections.forEach((item) => {
+        if (item.section.getBoundingClientRect().top <= marker) current = item;
+      });
+    }
+
+    trackedSections.forEach(({ link }) => {
+      const active = link === current.link;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'location');
+      else link.removeAttribute('aria-current');
+    });
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateActive);
+    }
+  }, { passive: true });
+  window.addEventListener('resize', updateActive);
+  updateActive();
+}
