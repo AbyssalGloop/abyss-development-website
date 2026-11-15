@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Abyss Development</title>
   <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
@@ -12,8 +14,8 @@
     <nav>
       <ul>
         <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Projects</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Projects</a></li>
         <li><a href="#">Services</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
@@ -23,7 +25,8 @@
   <section class="hero">
     <div class="hero-content">
       <h1>Got an idea? Let's build it.</h1>
-      <p>I'm Abyss, an independent developer working on custom Discord bots, game integrations and automation. Whether it's a small feature or a more ambitious project, I'm happy to explore what we can make happen.</p>
+      <p>I'm Abyss, an independent developer working on custom Discord bots, game integrations and automation.</p>
+      <p>Whether you need a small feature, a custom system or something a little more ambitious, feel free to get in touch. I'm always happy to hear what you have in mind.</p>
       <div class="hero-buttons">
         <a href="#" class="btn btn-primary">See what I've built</a>
         <a href="#" class="btn btn-secondary">Get in touch</a>
@@ -33,6 +36,244 @@
       <img src="mascot.png" alt="Abyss Development mascot: a black dragon with purple accents" class="mascot">
     </div>
   </section>
+
+  <section class="about reveal" id="about">
+    <h2>A little about me</h2>
+    <div class="about-layout">
+      <div class="about-text">
+        <p>I'm an independent developer with a focus on Discord bots, game integrations and automation.</p>
+        <p>What started with working on a community's own bot gradually grew into something more. Over time, I've gained hands-on experience maintaining existing systems, adding new features and building tools that make running gaming communities easier.</p>
+        <p>I enjoy figuring out how things work and finding practical ways to bring ideas to life. I'm always looking to learn something new, take on interesting challenges and improve along the way.</p>
+        <p>Now I'd like to put that experience to use and help other communities build what they have in mind.</p>
+      </div>
+
+      <ul class="about-panel">
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="panel-desc-1">
+            <span>Independent developer</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="panel-desc-1">
+            <div class="panel-desc-inner">
+              <p>Abyss Development is just me, so you'll be talking directly to the person writing the code.</p>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="panel-desc-2">
+            <span>Main focus: JavaScript, Discord bots and game integrations</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="panel-desc-2">
+            <div class="panel-desc-inner">
+              <p>Most of what I build is written in JavaScript, mainly Discord bots and tools that connect games with Discord.</p>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="panel-desc-3">
+            <span>Backend-focused development</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="panel-desc-3">
+            <div class="panel-desc-inner">
+              <p>I mostly work on the parts that run behind the scenes, like commands, data handling and the logic that keeps everything working.</p>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="panel-desc-4">
+            <span>Continuously learning and expanding my skills</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="panel-desc-4">
+            <div class="panel-desc-inner">
+              <p>I'm self-taught and keep learning as I go. Every project teaches me something new.</p>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="projects reveal" id="projects">
+    <h2>Projects</h2>
+
+    <article class="project-card">
+      <div class="project-intro">
+        <div class="project-info">
+          <span class="project-label">Featured project</span>
+          <h3>Ignited Realms Bot</h3>
+          <p>A custom Discord bot developed and maintained for a gaming community, combining Discord functionality with game integrations, automation and community management tools.</p>
+          <ul class="tech-list" aria-label="Technologies">
+            <li>JavaScript</li>
+            <li>Node.js</li>
+            <li>MySQL</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Media gallery. To add an item, copy one <li> block below.
+           Images: set href + img src to the file, data-type="image".
+           Videos: set href + <video> src to the file, data-type="video".
+           data-caption is the one line shown under the enlarged view. -->
+      <ul class="media-gallery" aria-label="Ignited Realms Bot screenshots and video">
+        <li>
+          <a class="media-item" href="assets/player-profile.png" data-type="image"
+             data-caption="Player Profile: stats, rankings, species records and weekly quests">
+            <span class="media-thumb">
+              <img src="assets/player-profile.png" alt="Player profile showing kill and death stats, server rank, best species and weekly quest progress" loading="lazy">
+            </span>
+            <span class="media-label">Player Profile</span>
+          </a>
+        </li>
+        <li>
+          <a class="media-item" href="assets/growth-station.png" data-type="image"
+             data-caption="Growth Station: Discord controls for in-game growth options">
+            <span class="media-thumb">
+              <img src="assets/growth-station.png" alt="Growth Station panel in Discord with a menu of growth options and their prices" loading="lazy">
+            </span>
+            <span class="media-label">Growth Station</span>
+          </a>
+        </li>
+        <li>
+          <a class="media-item" href="assets/targeting-detection.png" data-type="image"
+             data-caption="Targeting Detection: an informational alert for staff review. It takes no automatic action.">
+            <span class="media-thumb">
+              <img src="assets/targeting-detection.png" alt="Staff alert flagging repeated fights between the same players for review, with player names redacted" loading="lazy">
+            </span>
+            <span class="media-label">Targeting Detection</span>
+          </a>
+        </li>
+        <li>
+          <a class="media-item" href="assets/moderation-overview.png" data-type="image"
+             data-caption="Moderation Tools: a player's moderation history and automatic-action info">
+            <span class="media-thumb">
+              <img src="assets/moderation-overview.png" alt="Staff view of a player's moderation history and next automatic action, with identifying details redacted" loading="lazy">
+            </span>
+            <span class="media-label">Moderation Tools</span>
+          </a>
+        </li>
+        <li>
+          <a class="media-item" href="assets/map-voting.png" data-type="image"
+             data-caption="Map Voting: players vote on the next map before a server restart">
+            <span class="media-thumb">
+              <img src="assets/map-voting.png" alt="Map vote message in Discord with a button for each map" loading="lazy">
+            </span>
+            <span class="media-label">Map Voting</span>
+          </a>
+        </li>
+        <li>
+          <a class="media-item" href="assets/banking-station-demo.mp4" data-type="video"
+             data-caption="Banking Station: a short recording of the banking interface">
+            <span class="media-thumb">
+              <video src="assets/banking-station-demo.mp4#t=0.1" preload="metadata" muted playsinline aria-hidden="true" tabindex="-1"></video>
+              <span class="media-play" aria-hidden="true"></span>
+            </span>
+            <span class="media-label">Banking Station <span class="media-kind">(video)</span></span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="project-features">
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="project-cat-1">
+            <span>Game Integrations &amp; Automation</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="project-cat-1">
+            <div class="panel-desc-inner">
+              <ul class="feature-list">
+                <li>Connects Discord with the community's Path of Titans servers through RCON, the game's server API and webhooks.</li>
+                <li>Lets players link their in-game account to Discord through a verification panel.</li>
+                <li>In-game chat commands for map voting, waystone teleports, the shop, duels and reports.</li>
+                <li>Map votes that switch the map and restart the server automatically.</li>
+                <li>Runs in-game events like Dark Time and Migration.</li>
+                <li>Checks that the servers come back online after a restart and lets staff know if something goes wrong.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="project-cat-2">
+            <span>Moderation &amp; Administration</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="project-cat-2">
+            <div class="panel-desc-inner">
+              <ul class="feature-list">
+                <li>Moderates global in-game chat with banned and muted word lists.</li>
+                <li>Detects third-partying — when outside players join an ongoing fight — while distinguishing them from actual groupmates.</li>
+                <li>Flags possible ban evasion and players who keep targeting the same person, so staff can take a look.</li>
+                <li>Keeps separate warning, mute and ban records for Discord and in-game.</li>
+                <li>Staff tools for notes, investigations, admin logs and clock-in tracking.</li>
+                <li>Staff applications handled directly in Discord.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="project-cat-3">
+            <span>Community Systems</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="project-cat-3">
+            <div class="panel-desc-inner">
+              <ul class="feature-list">
+                <li>An in-game currency, Magma Shards, earned through activity, voting, weekly quests and events.</li>
+                <li>A shop for items and weather changes, usable in-game or from a Discord panel.</li>
+                <li>Minigames like dice, slots and blackjack, played with the in-game currency.</li>
+                <li>Weekly quests with three tiers, so casual players still earn something.</li>
+                <li>Player profiles, leaderboards and survival stats.</li>
+                <li>Announcements for new YouTube videos from the community and its creators.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+        <li class="panel-item">
+          <button class="panel-toggle" type="button" aria-expanded="false" aria-controls="project-cat-4">
+            <span>Ongoing Development</span>
+            <span class="panel-arrow" aria-hidden="true"></span>
+          </button>
+          <div class="panel-desc" id="project-cat-4">
+            <div class="panel-desc-inner">
+              <ul class="feature-list">
+                <li>The bot is still in active development, with new features and fixes going in regularly.</li>
+                <li>Features and improvements are developed around the community's needs.</li>
+                <li>Recent additions include a separate chat strike system and a buff for players who play solo.</li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <div class="project-more">
+        <p class="project-more-title">And there's more...</p>
+        <ul class="more-list">
+          <li>Ticket management</li>
+          <li>Donator perks</li>
+          <li>Waystone pricing</li>
+          <li>Growth tokens</li>
+        </ul>
+      </div>
+    </article>
+  </section>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Enlarged media">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" type="button" aria-label="Close">&times;</button>
+      <div class="lightbox-media"></div>
+      <div class="lightbox-bar">
+        <button class="lightbox-nav lightbox-prev" type="button" aria-label="Previous item">
+          <span class="panel-arrow" aria-hidden="true"></span>
+        </button>
+        <p class="lightbox-caption"></p>
+        <button class="lightbox-nav lightbox-next" type="button" aria-label="Next item">
+          <span class="panel-arrow" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+  </dialog>
 
   <script src="script.js"></script>
 </body>
