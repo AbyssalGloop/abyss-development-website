@@ -287,7 +287,7 @@
       </article>
     </div>
 
-    <p class="services-closing">Have an idea, or an existing project that needs some work? Feel free to get in touch, and we can talk about what's possible.</p>
+    <p class="services-closing">Have an idea, or an existing project that needs some work?<br>Feel free to get in touch, and we can talk about what's possible.</p>
   </section>
 
   <!-- Pricing. All prices are in <span class="price"> elements, so they can be
@@ -296,85 +296,54 @@
     <h2>Pricing</h2>
 
     <div class="pricing-intro">
-      <p>Every project is different. Whether you need a small Discord feature, a game integration or a more extensive system, pricing depends on the work involved and the requirements of your project.</p>
-      <p>The examples below are intended as a general guide, not fixed offers. Final pricing is discussed individually before work begins.</p>
+      <p>Every project is different. The ranges below give a rough idea of what to expect.</p>
     </div>
 
-    <div class="pricing-dev">
-      <div class="pricing-grid">
-        <article class="price-card">
-          <span class="price-step">1</span>
-          <h3>Discord-only Development</h3>
-          <p class="price-card-desc">Projects that run entirely within Discord, without a connection to a game server.</p>
-          <ul class="price-list">
-            <li><span>Small adjustments / commands (slash commands, buttons, role changes)</span> <span class="price">€30–70</span></li>
-            <li><span>Ticket and support systems</span> <span class="price">€40–100</span></li>
-            <li><span>Moderation and warning systems</span> <span class="price">€50–150</span></li>
-            <li><span>More involved Discord systems (combined moderation, ticket and staff tools)</span> <span class="price">€150–400</span></li>
-          </ul>
-        </article>
-
-        <article class="price-card">
-          <span class="price-step">2</span>
-          <h3>Game-integrated Development</h3>
-          <p class="price-card-desc">Projects that communicate with a game server through available interfaces such as RCON, APIs or webhooks.</p>
-          <ul class="price-list">
-            <li><span>Player verification and account linking</span> <span class="price">€80–250</span></li>
-            <li><span>Player statistics and tracking</span> <span class="price">€100–250</span></li>
-            <li><span>In-game commands (teleport, shops, etc.)</span> <span class="price">€100–300+</span></li>
-            <li><span>Automated server management (map voting, server monitoring)</span> <span class="price">€150–400+</span></li>
-          </ul>
-          <p class="price-note">These are examples rather than fixed prices. Actual costs depend on the game's available interfaces, existing infrastructure, complexity and required functionality.</p>
-        </article>
-      </div>
-
-      <div class="price-addon">
-        <span class="price-addon-plus" aria-hidden="true">+</span>
-        <h3>Optional game integration</h3>
-        <p>Game integration can also be added to projects that would otherwise be Discord-only. For example, a Discord moderation bot could optionally include:</p>
-        <ul class="feature-list">
-          <li>In-game account linking</li>
-          <li>Player lookups connecting Discord users to their in-game identities</li>
-          <li>Synchronisation of warnings, bans and mutes between Discord and the game</li>
+    <div class="price-tracks">
+      <div class="price-track">
+        <p class="price-track-label">Development</p>
+        <p class="price-track-desc">Grouped by how involved the work is. Discord features and game functionality can be part of the same project.</p>
+        <ul class="price-rows">
+          <li class="price-row">
+            <div>
+              <h3>Bot Commands &amp; Features</h3>
+              <p>Smaller features built around how your community works – not limited to what a generic public bot happens to offer.</p>
+            </div>
+            <span class="price">€10–100</span>
+          </li>
+          <li class="price-row">
+            <div>
+              <h3>Bot Systems</h3>
+              <p>Larger systems with several connected parts, such as moderation tools and ticket structures or features that store and track data over time.</p>
+            </div>
+            <span class="price">€100–500</span>
+          </li>
+          <li class="price-row">
+            <div>
+              <h3>Game Server Integration</h3>
+              <p>Connecting Discord and your game server through RCON, APIs or webhooks, for example player linking, statistics, in-game commands and shops.</p>
+            </div>
+            <span class="price">€100–500+</span>
+          </li>
         </ul>
-        <p class="price-note">Game integration is not mandatory for every project. Its requirements and additional development costs depend on the game and available interfaces.</p>
-      </div>
-
-      <div class="pricing-larger">
-        <h3>Larger projects &amp; complete systems</h3>
-        <p>More extensive bots, interconnected systems and complete custom projects are quoted individually based on their scope, complexity and requirements. The examples above cover individual features and smaller systems, not complete bots like the one in the project showcase.</p>
       </div>
     </div>
 
-    <article class="price-card hosting-card">
-      <div class="hosting-head">
-        <div>
-          <span class="price-step">3</span>
-          <h3>Managed Hosting</h3>
-          <p class="price-card-desc">Optional monthly hosting and operation for bots I've developed.</p>
-        </div>
-        <p class="hosting-price">Starting from <span class="price">€15</span>/month</p>
-      </div>
-      <ul class="feature-list hosting-list">
-        <li>Deployment and initial configuration</li>
-        <li>Bot hosting and operation</li>
-        <li>Basic uptime monitoring and crash restarts</li>
-        <li>Routine server and runtime maintenance</li>
-        <li>Troubleshooting operational issues</li>
-        <li>Fixing problems caused by my own hosting changes or deployments</li>
-      </ul>
-      <p class="price-note">Basic operational maintenance is included in hosting. New features, substantial code changes and unrelated development work are quoted separately.</p>
-    </article>
+    <div class="pricing-other">
+      <article class="price-card">
+        <h3>Larger Projects</h3>
+        <p class="price-card-value"><span class="price">Individually quoted</span></p>
+        <p>Complete custom bots, interconnected systems and extensive projects are assessed individually based on their scope and requirements.</p>
+      </article>
 
-    <div class="payment-info">
-      <h3><span class="price-step">4</span> Payment &amp; project arrangements</h3>
-      <ul class="feature-list">
-        <li>Smaller projects can be paid upfront.</li>
-        <li>Larger projects can use an agreed deposit and milestone payments.</li>
-        <li>Maintenance and further development can be arranged separately.</li>
-        <li>Project scope and budget can be discussed before work begins.</li>
-      </ul>
+      <article class="price-card">
+        <h3>Managed Hosting</h3>
+        <p class="price-card-value">From <span class="price">€15</span>/month</p>
+        <p>Hosting, deployment, monitoring and basic operational maintenance. Additional development and substantial code changes are quoted separately.</p>
+      </article>
     </div>
+
+    <p class="pricing-note">These ranges are starting points, not fixed prices. The game, your existing setup and the overall complexity can all affect the final quote. Smaller projects can be paid upfront, while larger projects can be arranged through milestone payments.</p>
   </section>
 
   <dialog class="lightbox" id="lightbox" aria-label="Enlarged media">
