@@ -1376,6 +1376,58 @@ a.logo {
   color: #ffffff;
 }
 
+/* Multi-paragraph clauses (Privacy Policy) */
+.clause-body p + p,
+.clause-body ul + p,
+.clause-body p + ul {
+  margin-top: 0.6rem;
+}
+
+.clause-body strong {
+  color: #ffffff;
+}
+
+/* Draft notice at the top of a legal page */
+.legal-status {
+  margin: 0 0 2.5rem;
+  padding: 1rem 1.25rem;
+  background-color: rgba(139, 92, 246, 0.06);
+  border: 1px solid #262626;
+  border-left: 2px solid #8b5cf6;
+  border-radius: 6px;
+  color: #cccccc;
+  line-height: 1.6;
+}
+
+.legal-status p {
+  margin: 0;
+}
+
+/* "Planned" label for features that don't exist yet */
+.legal-tag {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.1rem 0.5rem;
+  border: 1px solid #8b5cf6;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: normal;
+  vertical-align: middle;
+  color: #c4b5fd;
+}
+
+/* Open points in a draft; must be gone before publication */
+.pending {
+  color: #d4a72c;
+}
+
+/* Information that must stand out, e.g. the right to object (Art. 21(4) GDPR) */
+.clause-callout {
+  padding: 0.9rem 1rem;
+  border: 1px solid #8b5cf6;
+  border-radius: 6px;
+}
+
 @media (max-width: 768px) {
   .site-footer {
     flex-direction: column;
