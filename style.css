@@ -965,6 +965,10 @@ section[id] {
   background-color: rgba(255, 255, 255, 0.02);
 }
 
+.price-track + .price-track {
+  margin-top: 1.25rem;
+}
+
 .price-track-label {
   display: flex;
   flex-wrap: wrap;
@@ -1442,4 +1446,9 @@ a.logo {
   .legal-meta span + span::before {
     content: none;
   }
+}
+
+/* Repairs panel follows the cards: same spacing as cards below Development */
+.pricing-other + .price-tracks {
+  margin-top: 3rem;
 }
