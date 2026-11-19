@@ -140,7 +140,7 @@ if (navToggle && siteNav) {
 
 // Highlight the nav link for the section currently in view
 const navLinks = Array.from(document.querySelectorAll('#site-nav a'));
-// The first "#" link (Home) maps to the hero; other "#" placeholders (e.g. Contact, until it has a section) are skipped.
+// The first "#" link (Home) maps to the hero; any other bare "#" links are skipped.
 let homeMapped = false;
 const trackedSections = navLinks
   .map((link) => {
