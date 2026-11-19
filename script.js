@@ -148,7 +148,8 @@ const trackedSections = navLinks
     let section = null;
     if (href === '#') {
       if (!homeMapped) { section = document.querySelector('.hero'); homeMapped = true; }
-    } else if (href && href.length > 1) {
+    } else if (href && href.startsWith('#') && href.length > 1) {
+      // Only same-page anchors; links like "../#about" on sub-pages are skipped
       section = document.querySelector(href);
     }
     return section ? { link, section } : null;
