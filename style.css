@@ -365,12 +365,12 @@ section[id] {
 
 /* Soft currents of light that drift slowly sideways: under the statement in
    the intro, above and below the project card, entering from the right in
-   Pricing, crossing behind the mascot in the hero, and below the contact cards.
-   The artwork (assets/galaxy-*.webp: a = violet, tilted; b = blue-violet,
-   rounder; c = a faint pair) is faded, distant-galaxy light: a soft core, a
-   halo that fades out smoothly and two very faint spiral arms. It is
-   pre-rendered, so the browser only draws an image and never computes a blur.
-   Each section uses its own mix, size and strength.
+   Pricing, drifting behind the mascot in the hero, and below the contact cards.
+   The artwork (assets/drift-a.webp = violet, drift-b.webp = blue-violet) is
+   a long, soft form of light that blurs out into nothing at both ends, like a
+   distant galaxy seen edge-on. It is pre-rendered, so the browser only draws
+   an image and never computes a blur. Besides drifting, each layer tilts
+   slowly around the centre of its main form (--ox / --oy), so it seems to turn.
    Performance: the drift moves the whole layer with `transform`, which the
    compositor (GPU) handles, so the blurred SVG is painted once and then only
    slides. (Animating background-position instead forced a full repaint of the
@@ -389,23 +389,30 @@ section[id] {
   left: 50%;
   width: calc(100vw + 440px);
   transform: translateX(-50%);
+  transform-origin: var(--ox, 50%) var(--oy, 50%);
   pointer-events: none;
 }
 
 .intro::after {
-  background: url("assets/galaxy-a.webp") calc(50% - 400px) calc(100% + 120px) / 900px auto no-repeat;
+  background: url("assets/drift-a.webp") calc(50% - 380px) 100% / 1100px auto no-repeat;
+  --ox: calc(50% - 380px);
+  --oy: calc(100% - 240px);
 }
 
 .projects::after {
   background:
-    url("assets/galaxy-b.webp") calc(50% + 420px) -230px / 820px auto no-repeat,
-    url("assets/galaxy-c.webp") calc(50% - 560px) calc(100% + 140px) / 900px auto no-repeat;
+    url("assets/drift-b.webp") calc(50% + 260px) -170px / 1300px auto no-repeat,
+    url("assets/drift-a.webp") calc(50% - 560px) calc(100% + 120px) / 1000px auto no-repeat;
+  --ox: calc(50% + 260px);
+  --oy: 114px;
   --o: 0.75;
   opacity: var(--o);
 }
 
 .pricing::after {
-  background: url("assets/galaxy-b.webp") calc(50% + 640px) 30% / 900px auto no-repeat;
+  background: url("assets/drift-b.webp") calc(50% + 560px) 30% / 1200px auto no-repeat;
+  --ox: calc(50% + 560px);
+  --oy: calc(30% + 105px);
   --o: 0.8;
   opacity: var(--o);
 }
@@ -427,10 +434,6 @@ section[id] {
     animation: current-west 30s ease-in-out infinite alternate;
   }
 
-  .hero-image::before {
-    animation: current-near 22s ease-in-out infinite alternate;
-  }
-
   .contact::after {
     animation: current-east 36s ease-in-out infinite alternate;
   }
@@ -440,7 +443,6 @@ section[id] {
   .js .projects:not(.in-view)::after,
   .js .pricing:not(.in-view)::after,
   .js .hero:not(.in-view)::after,
-  .js .hero:not(.in-view) .hero-image::before,
   .js .contact:not(.in-view)::after {
     animation-play-state: paused;
   }
@@ -449,30 +451,22 @@ section[id] {
   .projects.in-view::after,
   .pricing.in-view::after,
   .hero.in-view::after,
-  .hero.in-view .hero-image::before,
   .contact.in-view::after {
     will-change: transform, opacity;
   }
 
   /* Drifting to the right: rises slightly and swells mid-way, then settles */
   @keyframes current-east {
-    0% { transform: translate(calc(-50% - 170px), 6px) scale(1); opacity: calc(var(--o, 1) * 0.6); }
-    45% { transform: translate(calc(-50% + 10px), -12px) scale(1.07); opacity: var(--o, 1); }
-    100% { transform: translate(calc(-50% + 170px), 10px) scale(1.02); opacity: calc(var(--o, 1) * 0.8); }
+    0% { transform: translate(calc(-50% - 170px), 6px) rotate(-4deg) scale(1); opacity: calc(var(--o, 1) * 0.6); }
+    45% { transform: translate(calc(-50% + 10px), -12px) rotate(1deg) scale(1.07); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% + 170px), 10px) rotate(5deg) scale(1.02); opacity: calc(var(--o, 1) * 0.8); }
   }
 
   /* Drifting to the left, with its swell at a different point */
   @keyframes current-west {
-    0% { transform: translate(calc(-50% + 170px), -8px) scale(1.04); opacity: calc(var(--o, 1) * 0.8); }
-    55% { transform: translate(calc(-50% - 20px), 12px) scale(1); opacity: var(--o, 1); }
-    100% { transform: translate(calc(-50% - 170px), -4px) scale(1.07); opacity: calc(var(--o, 1) * 0.6); }
-  }
-
-  /* The cluster right behind the mascot: shorter, closer movement against the wide currents */
-  @keyframes current-near {
-    0% { transform: translate(calc(4% - 60px), -2%) rotate(-6deg) scale(0.96); opacity: 0.65; }
-    50% { transform: translate(4%, -6%) rotate(2deg) scale(1.05); opacity: 0.9; }
-    100% { transform: translate(calc(4% + 60px), -3%) rotate(8deg) scale(1); opacity: 0.75; }
+    0% { transform: translate(calc(-50% + 170px), -8px) rotate(4deg) scale(1.04); opacity: calc(var(--o, 1) * 0.8); }
+    55% { transform: translate(calc(-50% - 20px), 12px) rotate(-1deg) scale(1); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% - 170px), -4px) rotate(-5deg) scale(1.07); opacity: calc(var(--o, 1) * 0.6); }
   }
 }
 
@@ -524,24 +518,21 @@ section[id] {
   -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent);
   mask-image: linear-gradient(180deg, #000 65%, transparent);
   background:
-    radial-gradient(ellipse 30% 40% at 86% 18%, rgba(129, 140, 248, 0.16), transparent 70%),
     radial-gradient(ellipse 45% 55% at 12% 95%, rgba(129, 140, 248, 0.09), transparent 70%),
     radial-gradient(ellipse 50% 60% at 10% 100%, rgba(30, 27, 46, 0.55), transparent 70%);
 }
 
-/* Light currents crossing behind the mascot (same artwork and drift as the
-   section currents). This layer holds two wide currents, one through the lower
-   half of the dragon and one above it; .hero-image::before adds a smaller one
-   moving the other way. The rest of the hero stays dark.
+/* One light current drifting behind the mascot (same artwork and motion as
+   the section currents); it doesn't need to cover the whole dragon. The rest
+   of the hero stays dark.
    The mascot's centre sits 334px right of the page centre at full width,
    and 52px below the middle of this layer at every width. */
 .hero::after {
   top: -6rem;
   bottom: 0;
   width: calc(100vw + 440px);
-  background:
-    url("assets/galaxy-a.webp") calc(50% + 300px) calc(50% + 90px) / 1000px auto no-repeat,
-    url("assets/galaxy-c.webp") calc(50% + 560px) calc(50% - 170px) / 760px auto no-repeat;
+  background: url("assets/drift-a.webp") calc(50% + 300px) calc(50% + 70px) / 1100px auto no-repeat;
+  transform-origin: calc(50% + 300px) calc(50% + 70px);
   --o: 0.85;
   opacity: var(--o);
   /* Fade out before the hero ends so the light never stops at a hard edge */
@@ -600,19 +591,6 @@ section[id] {
   align-items: center;
 }
 
-/* A smaller current directly behind the mascot, so the dark dragon stands out
-   against moving light rather than a static glow */
-.hero-image::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  width: 150%;
-  aspect-ratio: 1000 / 800;
-  background: url("assets/galaxy-b.webp") center / contain no-repeat;
-  transform: translate(4%, -4%);
-  pointer-events: none;
-}
-
 .mascot {
   position: relative;
   width: 380px;
@@ -636,8 +614,9 @@ section[id] {
    (30vw - 10px) right of the page centre */
 @media (min-width: 769px) and (max-width: 1143px) {
   .hero::after {
-    background-position: calc(50% + 30vw - 40px) calc(50% + 110px), calc(50% + 30vw + 60px) calc(50% - 20px);
-    background-size: 880px auto, 760px auto;
+    background-position: calc(50% + 30vw - 40px) calc(50% + 70px);
+    background-size: 950px auto;
+    transform-origin: calc(50% + 30vw - 40px) calc(50% + 70px);
   }
 }
 
@@ -647,7 +626,7 @@ section[id] {
   }
 
   .hero::after {
-    background-size: 760px auto, 660px auto;
+    background-size: 850px auto;
   }
 }
 
@@ -661,15 +640,16 @@ section[id] {
 
   .hero::before {
     background:
-      radial-gradient(ellipse 80% 35% at 50% 80%, rgba(139, 92, 246, 0.2), transparent 70%),
-      radial-gradient(ellipse 60% 25% at 80% 10%, rgba(129, 140, 248, 0.14), transparent 70%);
+      radial-gradient(ellipse 80% 35% at 50% 80%, rgba(139, 92, 246, 0.2), transparent 70%);
   }
 
   /* Mascot sits below the text on narrow screens, so the currents follow it.
      The mascot's centre is about 163px above the bottom of the hero. */
   .hero::after {
-    background-position: center bottom 0, center bottom 90px;
-    background-size: 760px auto, 640px auto;
+    background-position: center bottom 0;
+    background-size: 760px auto;
+    /* turn around the mascot, which is centred on narrow screens */
+    transform-origin: 50% calc(100% - 160px);
     -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
     mask-image: linear-gradient(180deg, #000 85%, transparent);
   }
@@ -1655,8 +1635,9 @@ section[id] {
   height: 100%;
   transform: translateX(-50%);
   background:
-    url("assets/galaxy-a.webp") calc(50% - 380px) calc(100% + 160px) / 900px auto no-repeat,
-    url("assets/galaxy-c.webp") calc(50% + 560px) 60% / 820px auto no-repeat;
+    url("assets/drift-a.webp") calc(50% - 300px) calc(100% + 60px) / 1100px auto no-repeat,
+    url("assets/drift-b.webp") calc(50% + 520px) 55% / 900px auto no-repeat;
+  transform-origin: calc(50% - 300px) calc(100% - 180px);
   /* Fade out just above the footer so the light never ends in a hard line */
   -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
   mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
