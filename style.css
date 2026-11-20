@@ -39,9 +39,19 @@
   --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, Arial, sans-serif;
 }
 
+/* Clip sideways overflow on both <html> and <body>. With <html> set, <body>
+   clips its own content (instead of handing the setting to the viewport), so
+   the full-width background layers and the drifting currents below can never
+   widen the page, on desktop or on touch devices. */
+html {
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background-color: var(--bg);
+  /* Depth: the page gets slowly darker the further down you go */
+  background-image: linear-gradient(180deg, #0a0a10 0, var(--bg) 900px, #060609 70%, #040406 100%);
   color: var(--text);
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
@@ -347,6 +357,123 @@ section[id] {
   border-style: solid;
   border-width: 1px 0;
   border-image: var(--grad-hairline) 1;
+  /* Faint light just inside the top edge, deeper shade towards the bottom */
+  box-shadow:
+    inset 0 80px 90px -80px rgba(167, 139, 250, 0.08),
+    inset 0 -100px 110px -70px rgba(2, 2, 4, 0.4);
+}
+
+/* Soft currents of light that drift slowly sideways: under the statement in
+   the intro, above and below the project card, entering from the right in
+   Pricing, crossing behind the mascot in the hero, and below the contact cards.
+   The artwork (assets/galaxy-*.webp: a = violet, tilted; b = blue-violet,
+   rounder; c = a faint pair) is faded, distant-galaxy light: a soft core, a
+   halo that fades out smoothly and two very faint spiral arms. It is
+   pre-rendered, so the browser only draws an image and never computes a blur.
+   Each section uses its own mix, size and strength.
+   Performance: the drift moves the whole layer with `transform`, which the
+   compositor (GPU) handles, so the blurred SVG is painted once and then only
+   slides. (Animating background-position instead forced a full repaint of the
+   layer and a re-render of the SVG blur on every frame.) The layer is 440px
+   wider than the screen so its edges never come into view while it moves, and
+   script.js pauses the drift while the section is off screen. --o sets each
+   layer's strength; the animation brightens and dims around it. */
+.intro::after,
+.projects::after,
+.pricing::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: calc(100vw + 440px);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.intro::after {
+  background: url("assets/galaxy-a.webp") calc(50% - 400px) calc(100% + 120px) / 900px auto no-repeat;
+}
+
+.projects::after {
+  background:
+    url("assets/galaxy-b.webp") calc(50% + 420px) -230px / 820px auto no-repeat,
+    url("assets/galaxy-c.webp") calc(50% - 560px) calc(100% + 140px) / 900px auto no-repeat;
+  --o: 0.75;
+  opacity: var(--o);
+}
+
+.pricing::after {
+  background: url("assets/galaxy-b.webp") calc(50% + 640px) 30% / 900px auto no-repeat;
+  --o: 0.8;
+  opacity: var(--o);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .intro::after {
+    animation: current-east 28s ease-in-out infinite alternate;
+  }
+
+  .projects::after {
+    animation: current-west 32s ease-in-out infinite alternate;
+  }
+
+  .pricing::after {
+    animation: current-west 34s ease-in-out infinite alternate;
+  }
+
+  .hero::after {
+    animation: current-west 30s ease-in-out infinite alternate;
+  }
+
+  .hero-image::before {
+    animation: current-near 22s ease-in-out infinite alternate;
+  }
+
+  .contact::after {
+    animation: current-east 36s ease-in-out infinite alternate;
+  }
+
+  /* Off screen: paused (script.js adds .in-view while the section is visible) */
+  .js .intro:not(.in-view)::after,
+  .js .projects:not(.in-view)::after,
+  .js .pricing:not(.in-view)::after,
+  .js .hero:not(.in-view)::after,
+  .js .hero:not(.in-view) .hero-image::before,
+  .js .contact:not(.in-view)::after {
+    animation-play-state: paused;
+  }
+
+  .intro.in-view::after,
+  .projects.in-view::after,
+  .pricing.in-view::after,
+  .hero.in-view::after,
+  .hero.in-view .hero-image::before,
+  .contact.in-view::after {
+    will-change: transform, opacity;
+  }
+
+  /* Drifting to the right: rises slightly and swells mid-way, then settles */
+  @keyframes current-east {
+    0% { transform: translate(calc(-50% - 170px), 6px) scale(1); opacity: calc(var(--o, 1) * 0.6); }
+    45% { transform: translate(calc(-50% + 10px), -12px) scale(1.07); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% + 170px), 10px) scale(1.02); opacity: calc(var(--o, 1) * 0.8); }
+  }
+
+  /* Drifting to the left, with its swell at a different point */
+  @keyframes current-west {
+    0% { transform: translate(calc(-50% + 170px), -8px) scale(1.04); opacity: calc(var(--o, 1) * 0.8); }
+    55% { transform: translate(calc(-50% - 20px), 12px) scale(1); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% - 170px), -4px) scale(1.07); opacity: calc(var(--o, 1) * 0.6); }
+  }
+
+  /* The cluster right behind the mascot: shorter, closer movement against the wide currents */
+  @keyframes current-near {
+    0% { transform: translate(calc(4% - 60px), -2%) rotate(-6deg) scale(0.96); opacity: 0.65; }
+    50% { transform: translate(4%, -6%) rotate(2deg) scale(1.05); opacity: 0.9; }
+    100% { transform: translate(calc(4% + 60px), -3%) rotate(8deg) scale(1); opacity: 0.75; }
+  }
 }
 
 @media (max-width: 768px) {
@@ -397,25 +524,27 @@ section[id] {
   -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent);
   mask-image: linear-gradient(180deg, #000 65%, transparent);
   background:
-    radial-gradient(ellipse 38% 55% at 74% 46%, rgba(139, 92, 246, 0.2), transparent 70%),
     radial-gradient(ellipse 30% 40% at 86% 18%, rgba(129, 140, 248, 0.16), transparent 70%),
     radial-gradient(ellipse 45% 55% at 12% 95%, rgba(129, 140, 248, 0.09), transparent 70%),
     radial-gradient(ellipse 50% 60% at 10% 100%, rgba(30, 27, 46, 0.55), transparent 70%);
 }
 
-/* Soft, translucent forms gathered behind the mascot; the rest of the hero
-   stays dark. Top layer: an asymmetrical violet ink form (with a faint
-   blue-violet layer), centred on the mascot. Lower layer: the wider glow.
+/* Light currents crossing behind the mascot (same artwork and drift as the
+   section currents). This layer holds two wide currents, one through the lower
+   half of the dragon and one above it; .hero-image::before adds a smaller one
+   moving the other way. The rest of the hero stays dark.
    The mascot's centre sits 334px right of the page centre at full width,
    and 52px below the middle of this layer at every width. */
 .hero::after {
   top: -6rem;
   bottom: 0;
+  width: calc(100vw + 440px);
   background:
-    url("assets/mascot-ink.svg") calc(50% + 334px) calc(50% + 52px) / 640px 546px no-repeat,
-    url("assets/hero-glow.svg") calc(50% + 314px) calc(50% + 40px) / 900px 760px no-repeat;
-  opacity: 0.8;
-  /* Fade out before the hero ends so the forms never stop at a hard edge */
+    url("assets/galaxy-a.webp") calc(50% + 300px) calc(50% + 90px) / 1000px auto no-repeat,
+    url("assets/galaxy-c.webp") calc(50% + 560px) calc(50% - 170px) / 760px auto no-repeat;
+  --o: 0.85;
+  opacity: var(--o);
+  /* Fade out before the hero ends so the light never stops at a hard edge */
   -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
   mask-image: linear-gradient(180deg, #000 70%, transparent);
 }
@@ -471,16 +600,17 @@ section[id] {
   align-items: center;
 }
 
-/* Soft lit glow behind the mascot, so the dark dragon stands out */
+/* A smaller current directly behind the mascot, so the dark dragon stands out
+   against moving light rather than a static glow */
 .hero-image::before {
   content: "";
   position: absolute;
   z-index: -1;
-  width: min(118%, 92vw);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.28), rgba(30, 27, 46, 0.5) 45%, rgba(16, 15, 24, 0) 70%);
+  width: 150%;
+  aspect-ratio: 1000 / 800;
+  background: url("assets/galaxy-b.webp") center / contain no-repeat;
+  transform: translate(4%, -4%);
+  pointer-events: none;
 }
 
 .mascot {
@@ -506,13 +636,8 @@ section[id] {
    (30vw - 10px) right of the page centre */
 @media (min-width: 769px) and (max-width: 1143px) {
   .hero::after {
-    background-position: calc(50% + 30vw - 10px) calc(50% + 52px), calc(50% + 314px) calc(50% + 40px);
-    background-size: 560px 478px, 900px 760px;
-  }
-
-  /* Keep the glow disc from reaching past the right edge of the screen */
-  .hero-image::before {
-    width: min(118%, 40vw + 20px);
+    background-position: calc(50% + 30vw - 40px) calc(50% + 110px), calc(50% + 30vw + 60px) calc(50% - 20px);
+    background-size: 880px auto, 760px auto;
   }
 }
 
@@ -522,7 +647,7 @@ section[id] {
   }
 
   .hero::after {
-    background-size: 460px 393px, 900px 760px;
+    background-size: 760px auto, 660px auto;
   }
 }
 
@@ -540,11 +665,11 @@ section[id] {
       radial-gradient(ellipse 60% 25% at 80% 10%, rgba(129, 140, 248, 0.14), transparent 70%);
   }
 
-  /* Mascot sits below the text on narrow screens, so the forms follow it.
+  /* Mascot sits below the text on narrow screens, so the currents follow it.
      The mascot's centre is about 163px above the bottom of the hero. */
   .hero::after {
-    background-position: center bottom -25px, center bottom -150px;
-    background-size: 440px 376px, 640px 540px;
+    background-position: center bottom 0, center bottom 90px;
+    background-size: 760px auto, 640px auto;
     -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
     mask-image: linear-gradient(180deg, #000 85%, transparent);
   }
@@ -793,7 +918,6 @@ section[id] {
    ========================================================================== */
 .projects::before {
   background:
-    radial-gradient(ellipse 40% 50% at 90% 10%, rgba(129, 140, 248, 0.12), transparent 70%),
     radial-gradient(ellipse 40% 50% at 5% 90%, rgba(139, 92, 246, 0.08), transparent 70%),
     linear-gradient(180deg, #0e0d15, #0b0a11);
 }
@@ -1519,18 +1643,25 @@ section[id] {
   padding-bottom: 8rem;
 }
 
+/* The same drifting currents as the other sections, flowing below and beside
+   the contact cards (drift and off-screen pause: see the current layers above) */
 .contact::after {
   content: "";
   position: absolute;
   z-index: -1;
   left: 50%;
   bottom: 0;
-  width: 100vw;
+  width: calc(100vw + 440px);
   height: 100%;
   transform: translateX(-50%);
   background:
-    radial-gradient(ellipse 45% 55% at 50% 100%, rgba(139, 92, 246, 0.16), transparent 70%),
-    radial-gradient(ellipse 30% 40% at 70% 100%, rgba(129, 140, 248, 0.12), transparent 70%);
+    url("assets/galaxy-a.webp") calc(50% - 380px) calc(100% + 160px) / 900px auto no-repeat,
+    url("assets/galaxy-c.webp") calc(50% + 560px) 60% / 820px auto no-repeat;
+  /* Fade out just above the footer so the light never ends in a hard line */
+  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
+  mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
+  --o: 0.85;
+  opacity: var(--o);
   pointer-events: none;
 }
 
@@ -1713,6 +1844,14 @@ section[id] {
   color: #ffffff;
 }
 
+/* While scrolling (.is-scrolling, set by script.js), the active-section
+   underline switches instantly instead of animating; the header is usually
+   off screen then anyway, and the animation repainted on every frame */
+.is-scrolling #site-nav a,
+.is-scrolling #site-nav a::after {
+  transition: none;
+}
+
 /* Scroll fade-in: only applied when JS is running, so content is never hidden without it */
 .js .reveal {
   opacity: 0;
@@ -1776,7 +1915,8 @@ a.logo:focus-visible {
   inset: 0 auto 0 50%;
   width: 100vw;
   transform: translateX(-50%);
-  background-color: #060609;
+  /* The deepest layer of the page */
+  background-color: #040406;
   border-top: 1px solid transparent;
   border-image: var(--grad-hairline) 1;
 }

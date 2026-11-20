@@ -16,6 +16,34 @@ if ('IntersectionObserver' in window) {
   revealItems.forEach((item) => item.classList.add('is-visible'));
 }
 
+// Mark the page as scrolling (until ~150ms after the last scroll event), so CSS
+// can skip the nav underline animation mid-scroll.
+const rootEl = document.documentElement;
+let scrollIdleTimer = null;
+
+window.addEventListener('scroll', () => {
+  if (scrollIdleTimer === null) rootEl.classList.add('is-scrolling');
+  else clearTimeout(scrollIdleTimer);
+  scrollIdleTimer = setTimeout(() => {
+    rootEl.classList.remove('is-scrolling');
+    scrollIdleTimer = null;
+  }, 150);
+}, { passive: true });
+
+// Pause the drifting background currents while their section is off screen
+// (CSS only runs the drift on sections marked .in-view)
+const driftSections = document.querySelectorAll('.hero, .intro, .projects, .pricing, .contact');
+
+if ('IntersectionObserver' in window) {
+  const driftObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => entry.target.classList.toggle('in-view', entry.isIntersecting));
+  }, { rootMargin: '100px 0px' });
+
+  driftSections.forEach((section) => driftObserver.observe(section));
+} else {
+  driftSections.forEach((section) => section.classList.add('in-view'));
+}
+
 // Expandable entries in the About info panel
 document.querySelectorAll('.panel-toggle').forEach((toggle) => {
   const desc = document.getElementById(toggle.getAttribute('aria-controls'));
@@ -158,6 +186,7 @@ const trackedSections = navLinks
 
 if (trackedSections.length) {
   let ticking = false;
+  let activeLink = null;
 
   const updateActive = () => {
     ticking = false;
@@ -172,6 +201,10 @@ if (trackedSections.length) {
         if (item.section.getBoundingClientRect().top <= marker) current = item;
       });
     }
+
+    // Only touch the DOM when the active section actually changes
+    if (current.link === activeLink) return;
+    activeLink = current.link;
 
     trackedSections.forEach(({ link }) => {
       const active = link === current.link;
