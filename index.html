@@ -9,6 +9,12 @@
 </head>
 <body>
 
+  <!-- Page-wide drifting currents of light (decorative; see style.css) -->
+  <div class="currents" aria-hidden="true">
+    <span class="current"></span><span class="current"></span><span class="current"></span><span class="current"></span>
+    <span class="current"></span><span class="current"></span><span class="current"></span>
+  </div>
+
   <header>
     <div class="logo">Abyss Development</div>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Open menu">
@@ -31,24 +37,23 @@
   <section class="hero">
     <div class="hero-content">
       <h1>Got an idea? <span class="hero-accent">Let's build it.</span></h1>
-      <p>I'm Abyss, an independent developer working on custom Discord bots, game integrations and automation.</p>
-      <p>Whether you need a small feature, a custom system or something a little more ambitious, feel free to get in touch. I'm always happy to hear what you have in mind.</p>
+      <p>I'm Abyss, an independent developer working on custom Discord bots, game integrations and automation. I take on anything from a single feature to a complete custom system.</p>
       <div class="hero-buttons">
         <a href="#projects" class="btn btn-primary">See what I've built</a>
         <a href="#contact" class="btn btn-secondary">Get in touch</a>
       </div>
     </div>
     <div class="hero-image">
-      <img src="mascot.png" alt="Abyss Development mascot: a black dragon with purple accents" class="mascot">
+      <div class="mascot-frame">
+        <img src="assets/mascot.webp" alt="Abyss Development mascot: a black dragon with purple accents" class="mascot" width="1200" height="870">
+      </div>
     </div>
   </section>
 
   <section class="intro band reveal" aria-labelledby="intro-heading">
     <h2 id="intro-heading">Not every idea fits into <span class="text-gradient">a template.</span></h2>
     <div class="intro-text">
-      <p>Sometimes the bots and tools that already exist just don't do what your community needs. Maybe your idea is very specific, a little unusual, or simply something nobody has built yet.</p>
-      <p>You shouldn't have to change your idea to fit someone else's software. Instead, I build the Discord bot, game server integration or tool around how you actually want it to work.</p>
-      <p>Tell me what you have in mind, we'll work out the details together, and I'll build it from there.</p>
+      <p>Sometimes the bots and tools that already exist just don't do what your community needs. Maybe your idea is very specific, a little unusual, or simply something nobody has built yet. You shouldn't have to change your idea to fit someone else's software. I'll build your bot, integration or tool so it works exactly the way you want it to.</p>
     </div>
   </section>
 
@@ -56,8 +61,8 @@
     <h2>A little about me</h2>
     <div class="about-layout">
       <div class="about-text">
-        <p>I'm an independent developer with a focus on Discord bots, game integrations and automation.</p>
-        <p>What started with working on a community's own bot gradually grew into something more. Over time, I've gained hands-on experience maintaining existing systems, adding new features and building tools that make running gaming communities easier.</p>
+        <p>What started with working on a community's own bot gradually grew into something more.</p>
+        <p>Over time, I've gained hands-on experience maintaining existing systems, adding new features and building tools that make running gaming communities easier.</p>
         <p>I enjoy figuring out how things work and finding practical ways to bring ideas to life. I'm always looking to learn something new, take on interesting challenges and improve along the way.</p>
         <p>Now I'd like to put that experience to use and help other communities build what they have in mind.</p>
       </div>
@@ -81,7 +86,7 @@
           </button>
           <div class="panel-desc" id="panel-desc-2">
             <div class="panel-desc-inner">
-              <p>Most of what I build is written in JavaScript, mainly Discord bots and tools that connect games with Discord.</p>
+              <p>Most of what I build is written in JavaScript, mainly Discord bots or tools that connect games with Discord.</p>
             </div>
           </div>
         </li>
@@ -119,7 +124,7 @@
         <div class="project-info">
           <span class="project-label">Featured project</span>
           <h3>Ignited Realms Bot</h3>
-          <p>A custom Discord bot developed and maintained for a gaming community, combining Discord functionality with game integrations, automation and community management tools.</p>
+          <p>A custom Discord bot developed and maintained for a Path of Titans community, combining Discord functionality with game integrations, automation and community management tools.</p>
           <ul class="tech-list" aria-label="Technologies">
             <li>JavaScript</li>
             <li>Node.js</li>
@@ -312,20 +317,18 @@
       </article>
       <article class="service-card">
         <h3>Community Systems &amp; Automation</h3>
-        <p>Building tools that make managing gaming communities easier. This includes automated moderation, warning systems, player tracking, ticket management, staff tools, activity tracking and custom community features.</p>
+        <p>Building tools that make managing communities easier. This includes automated moderation, warning systems, player tracking, ticket management, staff tools, activity tracking and custom community features.</p>
       </article>
       <article class="service-card">
         <h3>Maintenance &amp; Ongoing Support</h3>
-        <p>Keeping existing bots and integrations running through bug fixes, updates, troubleshooting, compatibility changes and further development.</p>
+        <p>Keeping existing bots and integrations running through bug fixes, updates, troubleshooting, compatibility changes and further development. This includes bots built by someone else.</p>
       </article>
     </div>
 
     <div class="services-highlight">
       <p class="services-highlight-label">Source code included</p>
-      <p>Everything I build for you comes with its source code once the work is delivered and paid for. You can host it wherever you like, have another developer work on it later, or keep it running with my managed hosting. It's your project, and you're not tied to me.</p>
+      <p>Everything I build for you comes with its source code once the work is completed and paid for. You can host it wherever you like, have another developer work on it later, or keep it running with my managed hosting. It's your project, and you're not tied to me.</p>
     </div>
-
-    <p class="services-closing">Have an idea, or an existing project that needs some work?<br>Feel free to get in touch, and we can talk about what's possible.</p>
   </section>
 
   <!-- Pricing. All prices are in <span class="price"> elements, so they can be
@@ -334,7 +337,7 @@
     <h2>Pricing</h2>
 
     <div class="pricing-intro">
-      <p>Every project is different. The ranges below give a rough idea of what to expect.</p>
+      <p>Every project is different, so the ranges below are starting points, not fixed prices. The game, your existing setup and the overall complexity can all affect the final quote. Smaller projects are paid upfront. Larger projects can be paid upfront or split into milestone payments.</p>
     </div>
 
     <div class="price-tracks">
@@ -347,14 +350,14 @@
               <h3>Bot Commands &amp; Features</h3>
               <p>Smaller features built around how your community works – not limited to what a generic public bot happens to offer.</p>
             </div>
-            <span class="price">€10–100</span>
+            <span class="price">€10–50</span>
           </li>
           <li class="price-row">
             <div>
               <h3>Bot Systems</h3>
               <p>Larger systems with several connected parts, such as moderation tools and ticket structures or features that store and track data over time.</p>
             </div>
-            <span class="price">€100–500</span>
+            <span class="price">€50–250</span>
           </li>
           <li class="price-row">
             <div>
@@ -377,13 +380,13 @@
       <article class="price-card">
         <h3>Managed Hosting</h3>
         <p class="price-card-value">From <span class="price">€15</span>/month</p>
-        <p>Hosting, deployment, monitoring, maintenance and troubleshooting. Bots I didn't build are welcome too, after a quick check. Larger repairs and code changes are quoted separately.</p>
+        <p>I'll take care of hosting and maintaining your bot, including deployment, monitoring, updates and troubleshooting. I can also host bots built by other developers, once I've reviewed their code. Larger repairs and custom code changes are quoted separately.</p>
       </article>
     </div>
 
     <div class="price-tracks">
       <div class="price-track">
-        <p class="price-track-label">Existing Bot Repairs &amp; Troubleshooting</p>
+        <p class="price-track-label">Existing Bot Changes, Repairs &amp; Troubleshooting</p>
         <p class="price-track-desc">For bots that already exist, including ones I didn't build. The price depends on the code quality, documentation, dependencies and how much investigating is needed.</p>
         <ul class="price-rows">
           <li class="price-row">
@@ -398,20 +401,26 @@
               <h3>Involved Repairs</h3>
               <p>Several bugs at once, database problems, broken integrations or outdated dependencies that need updating.</p>
             </div>
-            <span class="price">€50–250</span>
+            <span class="price">€50–100</span>
           </li>
           <li class="price-row">
             <div>
               <h3>Major Repairs &amp; Recovery</h3>
               <p>Getting a badly broken bot running again, stabilizing it and refactoring problematic code where needed.</p>
             </div>
-            <span class="price">€50–250+</span>
+            <span class="price">€100–250+</span>
           </li>
         </ul>
       </div>
     </div>
 
-    <p class="pricing-note">These ranges are starting points, not fixed prices. The game, your existing setup and the overall complexity can all affect the final quote. Smaller projects can be paid upfront, while larger projects can be arranged through milestone payments.</p>
+    <div class="pricing-other pricing-other-single">
+      <article class="price-card">
+        <h3>New Features &amp; Enhancements</h3>
+        <p class="price-card-value"><span class="price">Individually quoted</span></p>
+        <p>Adding new commands, integrations or functionality to an existing bot. Pricing depends on the scope and complexity of the requested changes.</p>
+      </article>
+    </div>
   </section>
 
   <section class="contact reveal" id="contact">
@@ -425,7 +434,7 @@
       <a class="contact-card" href="https://discord.com/users/561178639031336961" target="_blank" rel="noopener noreferrer">
         <p class="contact-label">Discord <span class="contact-tag">Preferred</span></p>
         <p class="contact-value">@flammi</p>
-        <p class="contact-desc">The quickest way to reach me. Send me a friend request and tell me what you have in mind.</p>
+        <p class="contact-desc">The quickest way to reach me. Just send a friend request.</p>
       </a>
 
       <a class="contact-card" href="mailto:embervalefossils@outlook.de">

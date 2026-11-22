@@ -2,7 +2,7 @@
    Design tokens
    Palette: black / charcoal, violet-purple as the main accent and
    blue-violet as its complement. No pink, magenta or pastel lavender:
-   every accent sits between ~235° (blue-violet) and ~258° (violet).
+   every accent sits between ~228° (blue) and ~266° (purple).
    ========================================================================== */
 :root {
   --bg: #08080c;
@@ -28,14 +28,23 @@
   --line: rgba(167, 139, 250, 0.11);
   --line-strong: rgba(167, 139, 250, 0.22);
 
-  --grad-accent: linear-gradient(135deg, var(--violet) 0%, var(--blue) 100%);
-  --grad-text: linear-gradient(100deg, var(--violet-soft) 0%, var(--blue) 100%);
+  /* One purple-to-blue pair for every gradient. The ends sit wider apart than
+     --violet/--blue (~266deg vs ~228deg) or the shift is invisible. */
+  --text-grad-from: #a35cff;
+  --text-grad-to: #6f8cff;
+  --grad-text: linear-gradient(100deg, var(--text-grad-from) 0%, var(--text-grad-from) 15%, var(--text-grad-to) 100%);
+  /* Same purple-to-blue for thin accent lines */
+  --grad-line: linear-gradient(90deg, var(--text-grad-from), var(--text-grad-to));
+  /* Darker version of the same pair for fills behind white text
+     (both ends keep white text above 4.5:1) */
+  --grad-fill: linear-gradient(135deg, #8a3ffc 0%, #4f6bf0 100%);
   --grad-hairline: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45) 30%, rgba(129, 140, 248, 0.4) 70%, transparent);
 
   --wrap: 1080px;
   --gutter: 2rem;
   --radius: 14px;
 
+  --font-head: "Gloock", Georgia, "Times New Roman", serif;
   --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Roboto, Arial, sans-serif;
 }
 
@@ -43,6 +52,14 @@
    clips its own content (instead of handing the setting to the viewport), so
    the full-width background layers and the drifting currents below can never
    widen the page, on desktop or on touch devices. */
+@font-face {
+  font-family: "Gloock";
+  src: url("assets/fonts/gloock-latin-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 html {
   overflow-x: clip;
 }
@@ -63,6 +80,10 @@ body {
 h1,
 h2,
 h3 {
+  font-family: var(--font-head);
+  /* Gloock ships a single weight; don't let the browser fake a bold */
+  font-weight: 400;
+  font-synthesis: none;
   letter-spacing: -0.015em;
 }
 
@@ -100,9 +121,9 @@ body > header {
   margin-right: 0.6rem;
   vertical-align: 0.1em;
   border-radius: 2px;
-  background: var(--grad-accent);
+  background: var(--grad-fill);
   transform: rotate(45deg);
-  box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 12px rgba(138, 63, 252, 0.6);
 }
 
 #site-nav ul {
@@ -142,7 +163,7 @@ body > header {
   bottom: -0.4rem;
   height: 2px;
   border-radius: 1px;
-  background: var(--grad-accent);
+  background: var(--grad-line);
   opacity: 0;
   transform: scaleX(0.4);
   transition: opacity 0.25s ease, transform 0.25s ease;
@@ -332,11 +353,12 @@ section[id] {
   width: fit-content;
   margin-bottom: 0.9rem;
   padding-right: 3.25rem;
+  font-family: var(--font);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   color: var(--accent-text);
-  background: linear-gradient(90deg, var(--violet), transparent) no-repeat right center / 2.5rem 1px;
+  background: linear-gradient(90deg, var(--text-grad-from), var(--text-grad-to) 60%, transparent) no-repeat right center / 2.5rem 1px;
 }
 
 /* Full-width background layer for "band" sections. The section keeps its
@@ -357,116 +379,136 @@ section[id] {
   border-style: solid;
   border-width: 1px 0;
   border-image: var(--grad-hairline) 1;
-  /* Faint light just inside the top edge, deeper shade towards the bottom */
-  box-shadow:
-    inset 0 80px 90px -80px rgba(167, 139, 250, 0.08),
-    inset 0 -100px 110px -70px rgba(2, 2, 4, 0.4);
+  /* Faint light just inside the top edge. (No dark shade at the bottom: it
+     darkened the page-wide currents inside the band only, so they broke off
+     in a hard line at the bottom border.) */
+  box-shadow: inset 0 80px 90px -80px rgba(167, 139, 250, 0.08);
 }
 
-/* Soft currents of light that drift slowly sideways: under the statement in
-   the intro, above and below the project card, entering from the right in
-   Pricing, drifting behind the mascot in the hero, and below the contact cards.
+/* Soft currents of light that drift slowly sideways across the whole page.
+   They live in one page-wide layer (.currents, first thing in <body>) instead
+   of inside the sections, so they flow across section edges and the page reads
+   as one continuous depth rather than separate blocks. They zigzag down the
+   page, violet on the left and blue-violet on the right, evenly spaced
+   (script.js places them). The hero has its own current behind the mascot, in the
+   same stretched shape.
    The artwork (assets/drift-a.webp = violet, drift-b.webp = blue-violet) is
    a long, soft form of light that blurs out into nothing at both ends, like a
    distant galaxy seen edge-on. It is pre-rendered, so the browser only draws
-   an image and never computes a blur. Besides drifting, each layer tilts
-   slowly around the centre of its main form (--ox / --oy), so it seems to turn.
-   Performance: the drift moves the whole layer with `transform`, which the
-   compositor (GPU) handles, so the blurred SVG is painted once and then only
-   slides. (Animating background-position instead forced a full repaint of the
-   layer and a re-render of the SVG blur on every frame.) The layer is 440px
-   wider than the screen so its edges never come into view while it moves, and
-   script.js pauses the drift while the section is off screen. --o sets each
-   layer's strength; the animation brightens and dims around it. */
-.intro::after,
-.projects::after,
-.pricing::after {
-  content: "";
+   an image and never computes a blur. Besides drifting, each current tilts
+   slowly around its own centre, so it seems to turn.
+   Performance: the drift moves each current with `transform`, which the
+   compositor (GPU) handles, so the image is painted once and then only
+   slides. script.js pauses each current while it is off screen. --o sets each
+   current's strength; the animation brightens and dims around it. */
+body {
+  position: relative;
+  isolation: isolate;
+}
+
+.currents {
   position: absolute;
   z-index: -1;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: calc(100vw + 440px);
-  transform: translateX(-50%);
-  transform-origin: var(--ox, 50%) var(--oy, 50%);
+  inset: 0;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.intro::after {
-  background: url("assets/drift-a.webp") calc(50% - 380px) 100% / 1100px auto no-repeat;
-  --ox: calc(50% - 380px);
-  --oy: calc(100% - 240px);
+.current {
+  position: absolute;
+  /* The artwork is a short, rounded form; stretched long and flat (about
+     2x wider, half as tall) it reads as a streak of current, not a ball */
+  width: 2200px;
+  aspect-ratio: 1920 / 420;
+  /* Tilt only a little while drifting: on a streak this long, the full tilt
+     lifted its ends ~100px, behind the cards above and below */
+  --tilt: 0.3;
+  background: url("assets/drift-a.webp") center / 100% 100% no-repeat;
+  /* Centred on its top/left point (--y carries the vertical half into the
+     drift keyframes) */
+  --y: -50%;
+  transform: translate(-50%, var(--y));
+  --o: 0.95;
+  opacity: var(--o);
+  /* The artwork is quite muted; push its colour a little */
+  filter: saturate(1.35) brightness(1.1);
 }
 
-.projects::after {
-  background:
-    url("assets/drift-b.webp") calc(50% + 260px) -170px / 1300px auto no-repeat,
-    url("assets/drift-a.webp") calc(50% - 560px) calc(100% + 120px) / 1000px auto no-repeat;
-  --ox: calc(50% + 260px);
-  --oy: 114px;
-  --o: 0.75;
-  opacity: var(--o);
+/* Left side: violet. Right side: blue-violet. */
+.current:nth-child(odd) {
+  left: calc(50% - min(560px, 36vw));
 }
 
-.pricing::after {
-  background: url("assets/drift-b.webp") calc(50% + 560px) 30% / 1200px auto no-repeat;
-  --ox: calc(50% + 560px);
-  --oy: calc(30% + 105px);
-  --o: 0.8;
-  opacity: var(--o);
+.current:nth-child(even) {
+  left: calc(50% + min(560px, 36vw));
+  background-image: url("assets/drift-b.webp");
+}
+
+/* script.js spaces the currents evenly down the page (about every 800px,
+   adding or removing currents to fit the page height) and snaps each one to
+   a nearby seam between sections, where the padding leaves empty space.
+   These percentages are only the fallback without JS. */
+.current:nth-child(1) { top: 14%; }
+.current:nth-child(2) { top: 26%; width: 2400px; }
+.current:nth-child(3) { top: 40%; }
+.current:nth-child(4) { top: 54%; width: 2600px; }
+.current:nth-child(5) { top: 63%; }
+.current:nth-child(6) { top: 88%; width: 2400px; }
+.current:nth-child(7) { top: 97%; }
+
+@media (max-width: 768px) {
+  .current,
+  .current:nth-child(n) {
+    width: 1300px;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .intro::after {
-    animation: current-east 28s ease-in-out infinite alternate;
-  }
-
-  .projects::after {
-    animation: current-west 32s ease-in-out infinite alternate;
-  }
-
-  .pricing::after {
-    animation: current-west 34s ease-in-out infinite alternate;
-  }
-
   .hero::after {
     animation: current-west 30s ease-in-out infinite alternate;
   }
 
-  .contact::after {
-    animation: current-east 36s ease-in-out infinite alternate;
+  /* Violet currents drift right, blue-violet ones left; slightly different
+     durations so neighbours never move in step */
+  .current:nth-child(odd) {
+    animation: current-east 30s ease-in-out infinite alternate;
   }
 
-  /* Off screen: paused (script.js adds .in-view while the section is visible) */
-  .js .intro:not(.in-view)::after,
-  .js .projects:not(.in-view)::after,
-  .js .pricing:not(.in-view)::after,
+  .current:nth-child(even) {
+    animation: current-west 34s ease-in-out infinite alternate;
+  }
+
+  .current:nth-child(3n) {
+    animation-duration: 38s;
+  }
+
+  .current:nth-child(4n + 1) {
+    animation-delay: -12s;
+  }
+
+  /* Off screen: paused (script.js adds .in-view while it is visible) */
   .js .hero:not(.in-view)::after,
-  .js .contact:not(.in-view)::after {
+  .js .current:not(.in-view) {
     animation-play-state: paused;
   }
 
-  .intro.in-view::after,
-  .projects.in-view::after,
-  .pricing.in-view::after,
   .hero.in-view::after,
-  .contact.in-view::after {
+  .current.in-view {
     will-change: transform, opacity;
   }
 
   /* Drifting to the right: rises slightly and swells mid-way, then settles */
   @keyframes current-east {
-    0% { transform: translate(calc(-50% - 170px), 6px) rotate(-4deg) scale(1); opacity: calc(var(--o, 1) * 0.6); }
-    45% { transform: translate(calc(-50% + 10px), -12px) rotate(1deg) scale(1.07); opacity: var(--o, 1); }
-    100% { transform: translate(calc(-50% + 170px), 10px) rotate(5deg) scale(1.02); opacity: calc(var(--o, 1) * 0.8); }
+    0% { transform: translate(calc(-50% - 170px), calc(var(--y, 0px) + 6px)) rotate(calc(-4deg * var(--tilt, 1))) scale(1); opacity: calc(var(--o, 1) * 0.6); }
+    45% { transform: translate(calc(-50% + 10px), calc(var(--y, 0px) - 12px)) rotate(calc(1deg * var(--tilt, 1))) scale(1.07); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% + 170px), calc(var(--y, 0px) + 10px)) rotate(calc(5deg * var(--tilt, 1))) scale(1.02); opacity: calc(var(--o, 1) * 0.8); }
   }
 
   /* Drifting to the left, with its swell at a different point */
   @keyframes current-west {
-    0% { transform: translate(calc(-50% + 170px), -8px) rotate(4deg) scale(1.04); opacity: calc(var(--o, 1) * 0.8); }
-    55% { transform: translate(calc(-50% - 20px), 12px) rotate(-1deg) scale(1); opacity: var(--o, 1); }
-    100% { transform: translate(calc(-50% - 170px), -4px) rotate(-5deg) scale(1.07); opacity: calc(var(--o, 1) * 0.6); }
+    0% { transform: translate(calc(-50% + 170px), calc(var(--y, 0px) - 8px)) rotate(calc(4deg * var(--tilt, 1))) scale(1.04); opacity: calc(var(--o, 1) * 0.8); }
+    55% { transform: translate(calc(-50% - 20px), calc(var(--y, 0px) + 12px)) rotate(calc(-1deg * var(--tilt, 1))) scale(1); opacity: var(--o, 1); }
+    100% { transform: translate(calc(-50% - 170px), calc(var(--y, 0px) - 4px)) rotate(calc(-5deg * var(--tilt, 1))) scale(1.07); opacity: calc(var(--o, 1) * 0.6); }
   }
 }
 
@@ -531,10 +573,14 @@ section[id] {
   top: -6rem;
   bottom: 0;
   width: calc(100vw + 440px);
-  background: url("assets/drift-a.webp") calc(50% + 300px) calc(50% + 70px) / 1100px auto no-repeat;
-  transform-origin: calc(50% + 300px) calc(50% + 70px);
-  --o: 0.85;
+  /* Stretched long and flat like the page currents (artwork drawn at
+     1920:420); its core runs behind the dragon and out past the right edge,
+     the tail fades out behind the headline */
+  background: url("assets/drift-b.webp") calc(50% + min(560px, 36vw)) calc(50% + 70px) / 2200px 481px no-repeat;
+  transform-origin: calc(50% + min(560px, 36vw)) calc(50% + 70px);
+  --o: 0.95;
   opacity: var(--o);
+  filter: saturate(1.35) brightness(1.1);
   /* Fade out before the hero ends so the light never stops at a hard edge */
   -webkit-mask-image: linear-gradient(180deg, #000 70%, transparent);
   mask-image: linear-gradient(180deg, #000 70%, transparent);
@@ -591,22 +637,78 @@ section[id] {
   align-items: center;
 }
 
+/* The wrapper carries the float, the drop shadow and a soft violet rim glow,
+   so the outline below moves and glows together with the dragon */
+.mascot-frame {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  filter:
+    drop-shadow(0 0 14px rgba(138, 63, 252, 0.35))
+    drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
+}
+
+/* Gradient outline: the brand gradient, masked to the dragon's silhouette
+   copied eight times, each shifted 2px in a different direction. Together
+   they form a slightly larger silhouette; the dragon on top covers the
+   middle, so only a 2px line around its edge stays visible. */
+.mascot-frame::before {
+  --w: 2px;
+  --d: 1.5px;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--text-grad-from), var(--text-grad-to));
+  -webkit-mask:
+    url("assets/mascot.webp") var(--w) 0 / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--w)) 0 / 100% 100% no-repeat,
+    url("assets/mascot.webp") 0 var(--w) / 100% 100% no-repeat,
+    url("assets/mascot.webp") 0 calc(-1 * var(--w)) / 100% 100% no-repeat,
+    url("assets/mascot.webp") var(--d) var(--d) / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--d)) var(--d) / 100% 100% no-repeat,
+    url("assets/mascot.webp") var(--d) calc(-1 * var(--d)) / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--d)) calc(-1 * var(--d)) / 100% 100% no-repeat;
+  mask:
+    url("assets/mascot.webp") var(--w) 0 / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--w)) 0 / 100% 100% no-repeat,
+    url("assets/mascot.webp") 0 var(--w) / 100% 100% no-repeat,
+    url("assets/mascot.webp") 0 calc(-1 * var(--w)) / 100% 100% no-repeat,
+    url("assets/mascot.webp") var(--d) var(--d) / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--d)) var(--d) / 100% 100% no-repeat,
+    url("assets/mascot.webp") var(--d) calc(-1 * var(--d)) / 100% 100% no-repeat,
+    url("assets/mascot.webp") calc(-1 * var(--d)) calc(-1 * var(--d)) / 100% 100% no-repeat;
+  /* Trim the layer's own edges: on the GPU, the box edge of the masked layer
+     could bleed through as a 1px line under the dragon. The dragon sits at
+     least 6px inside the image on every side (at the smallest size), so this
+     never touches the outline itself. */
+  clip-path: inset(4px);
+  pointer-events: none;
+}
+
 .mascot {
   position: relative;
+  display: block;
   width: 380px;
   max-width: 100%;
   height: auto;
-  filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 1px rgba(167, 139, 250, 0.35));
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .mascot {
+  /* The float is a small, slow move (12px over 3.5s). Chrome snaps a layer
+     that is only translated to whole pixels, so the mascot jumped about 5
+     times a second and sat still in between, which read as a low frame rate.
+     A tiny rotation (0.02deg, invisible) makes the transform more than a
+     plain translation, so the compositor draws it at sub-pixel positions
+     on every frame. will-change keeps it on its own GPU layer. */
+  .mascot-frame {
     animation: float 7s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    0%, 100% { transform: translate3d(0, 0, 0) rotate(0.02deg); }
+    50% { transform: translate3d(0, -12px, 0) rotate(0.02deg); }
   }
 }
 
@@ -614,9 +716,7 @@ section[id] {
    (30vw - 10px) right of the page centre */
 @media (min-width: 769px) and (max-width: 1143px) {
   .hero::after {
-    background-position: calc(50% + 30vw - 40px) calc(50% + 70px);
-    background-size: 950px auto;
-    transform-origin: calc(50% + 30vw - 40px) calc(50% + 70px);
+    background-size: 1900px 416px;
   }
 }
 
@@ -626,7 +726,7 @@ section[id] {
   }
 
   .hero::after {
-    background-size: 850px auto;
+    background-size: 1700px 372px;
   }
 }
 
@@ -646,8 +746,8 @@ section[id] {
   /* Mascot sits below the text on narrow screens, so the currents follow it.
      The mascot's centre is about 163px above the bottom of the hero. */
   .hero::after {
-    background-position: center bottom 0;
-    background-size: 760px auto;
+    background-position: center bottom 40px;
+    background-size: 1300px 284px;
     /* turn around the mascot, which is centred on narrow screens */
     transform-origin: 50% calc(100% - 160px);
     -webkit-mask-image: linear-gradient(180deg, #000 85%, transparent);
@@ -686,11 +786,11 @@ section[id] {
   padding: 6.5rem var(--gutter);
 }
 
+/* Bands: a flat, see-through tint and the hairline borders set them apart.
+   No corner glows: the page-wide currents are the light, and the glows
+   competed with them. */
 .intro::before {
-  background:
-    radial-gradient(ellipse 45% 80% at 0% 0%, rgba(139, 92, 246, 0.14), transparent 70%),
-    radial-gradient(ellipse 35% 70% at 100% 100%, rgba(129, 140, 248, 0.1), transparent 70%),
-    linear-gradient(180deg, var(--surface-1), var(--surface-0));
+  background: linear-gradient(180deg, rgba(160, 150, 230, 0.05), rgba(160, 150, 230, 0.025));
 }
 
 .intro h2 {
@@ -708,7 +808,7 @@ section[id] {
   height: 3px;
   margin-top: 1.75rem;
   border-radius: 2px;
-  background: var(--grad-accent);
+  background: var(--grad-line);
 }
 
 .text-gradient {
@@ -730,14 +830,8 @@ section[id] {
   margin: 0 0 1.25rem;
 }
 
-/* The invitation at the end reads as a closing line */
 .intro-text p:last-child {
-  margin: 2rem 0 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--line-strong);
-  font-size: 1.25rem;
-  line-height: 1.5;
-  color: var(--text);
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
@@ -757,10 +851,6 @@ section[id] {
 
   .intro-text p {
     font-size: 1.05rem;
-  }
-
-  .intro-text p:last-child {
-    font-size: 1.15rem;
   }
 }
 
@@ -897,9 +987,7 @@ section[id] {
    Projects: charcoal band with one showcase panel
    ========================================================================== */
 .projects::before {
-  background:
-    radial-gradient(ellipse 40% 50% at 5% 90%, rgba(139, 92, 246, 0.08), transparent 70%),
-    linear-gradient(180deg, #0e0d15, #0b0a11);
+  background: linear-gradient(180deg, rgba(160, 150, 230, 0.035), rgba(160, 150, 230, 0.02));
 }
 
 .project-card {
@@ -1049,7 +1137,7 @@ section[id] {
   height: 2.75rem;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: var(--grad-accent);
+  background: var(--grad-fill);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
 }
 
@@ -1257,7 +1345,7 @@ section[id] {
   width: 6px;
   height: 6px;
   border-radius: 1px;
-  background: var(--grad-accent);
+  background: var(--grad-fill);
   transform: rotate(45deg);
 }
 
@@ -1377,8 +1465,8 @@ section[id] {
   width: 3rem;
   height: 3rem;
   border-radius: 12px;
-  background: var(--grad-accent);
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.3);
+  background: var(--grad-fill);
+  box-shadow: 0 8px 24px rgba(138, 63, 252, 0.3);
   font-family: Consolas, "SF Mono", Menlo, monospace;
   font-size: 0.95rem;
   font-weight: 700;
@@ -1398,14 +1486,6 @@ section[id] {
   font-size: 1.1rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--text);
-}
-
-.services-closing {
-  max-width: 640px;
-  margin: 3rem 0 0;
-  font-size: 1.15rem;
-  line-height: 1.6;
   color: var(--text);
 }
 
@@ -1432,24 +1512,17 @@ section[id] {
     height: 2.6rem;
     font-size: 0.85rem;
   }
-
-  .services-closing {
-    font-size: 1.05rem;
-  }
 }
 
 /* ==========================================================================
    Pricing: tinted band, ledger-style ranges
    ========================================================================== */
 .pricing::before {
-  background:
-    radial-gradient(ellipse 45% 40% at 100% 0%, rgba(139, 92, 246, 0.14), transparent 70%),
-    radial-gradient(ellipse 40% 40% at 0% 100%, rgba(129, 140, 248, 0.1), transparent 70%),
-    linear-gradient(180deg, var(--surface-1), var(--surface-0));
+  background: linear-gradient(180deg, rgba(160, 150, 230, 0.05), rgba(160, 150, 230, 0.025));
 }
 
 .pricing-intro p {
-  max-width: 620px;
+  max-width: 820px;
   font-size: 1.1rem;
   line-height: 1.6;
   color: var(--text-muted);
@@ -1479,7 +1552,7 @@ section[id] {
   width: 4rem;
   height: 2px;
   border-radius: 1px;
-  background: var(--grad-accent);
+  background: var(--grad-line);
 }
 
 .price-track + .price-track {
@@ -1579,14 +1652,10 @@ section[id] {
 
 .price-card-value .price {
   color: var(--accent-text);
-}
-
-.pricing-note {
-  max-width: 680px;
-  margin: 2rem 0 0;
-  font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--text-dim);
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 @media (max-width: 768px) {
@@ -1621,29 +1690,6 @@ section[id] {
 .contact {
   isolation: isolate;
   padding-bottom: 8rem;
-}
-
-/* The same drifting currents as the other sections, flowing below and beside
-   the contact cards (drift and off-screen pause: see the current layers above) */
-.contact::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  left: 50%;
-  bottom: 0;
-  width: calc(100vw + 440px);
-  height: 100%;
-  transform: translateX(-50%);
-  background:
-    url("assets/drift-a.webp") calc(50% - 300px) calc(100% + 60px) / 1100px auto no-repeat,
-    url("assets/drift-b.webp") calc(50% + 520px) 55% / 900px auto no-repeat;
-  transform-origin: calc(50% - 300px) calc(100% - 180px);
-  /* Fade out just above the footer so the light never ends in a hard line */
-  -webkit-mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
-  mask-image: linear-gradient(180deg, #000 78%, transparent 99%);
-  --o: 0.85;
-  opacity: var(--o);
-  pointer-events: none;
 }
 
 .contact-intro p {
@@ -1802,9 +1848,9 @@ section[id] {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--violet-deep), var(--blue-deep));
+  background: var(--grad-fill);
   color: #ffffff;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(138, 63, 252, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover,
@@ -2250,6 +2296,11 @@ a.logo:focus-visible {
 }
 
 /* Repairs panel follows the cards: same spacing as cards below Development */
+/* A single card on its own row spans the full width */
+.pricing-other-single {
+  grid-template-columns: 1fr;
+}
+
 .pricing-other + .price-tracks {
   margin-top: 1.25rem;
 }

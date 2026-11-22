@@ -30,18 +30,61 @@ window.addEventListener('scroll', () => {
   }, 150);
 }, { passive: true });
 
-// Pause the drifting background currents while their section is off screen
-// (CSS only runs the drift on sections marked .in-view)
-const driftSections = document.querySelectorAll('.hero, .intro, .projects, .pricing, .contact');
+// Space the page-wide currents evenly from the end of the hero down to the
+// footer, about one every CURRENT_SPACING px, adding or removing currents to
+// fit the page height. A current that lands near a seam between sections
+// (where the section padding leaves empty space) snaps onto it.
+// Re-placed whenever the page height changes.
+const currentsLayer = document.querySelector('.currents');
+const heroEl = document.querySelector('.hero');
+const footerEl = document.querySelector('.site-footer');
+const seams = [...document.querySelectorAll('body > section:not(.hero), body > footer')];
+const CURRENT_SPACING = 800;
+const SEAM_SNAP = 220;
 
-if ('IntersectionObserver' in window) {
-  const driftObserver = new IntersectionObserver((entries) => {
+function placeCurrents() {
+  const start = heroEl.offsetTop + heroEl.offsetHeight;
+  const end = footerEl.offsetTop;
+  const count = Math.max(2, Math.round((end - start) / CURRENT_SPACING) + 1);
+  const step = (end - start) / (count - 1);
+
+  while (currentsLayer.children.length < count) {
+    const span = document.createElement('span');
+    span.className = 'current';
+    currentsLayer.appendChild(span);
+    if (driftObserver) driftObserver.observe(span);
+  }
+  while (currentsLayer.children.length > count) {
+    const last = currentsLayer.lastElementChild;
+    if (driftObserver) driftObserver.unobserve(last);
+    last.remove();
+  }
+
+  [...currentsLayer.children].forEach((el, i) => {
+    let y = start + i * step;
+    const near = seams.reduce((best, s) => (Math.abs(s.offsetTop - y) < Math.abs(best - y) ? s.offsetTop : best), Infinity);
+    if (Math.abs(near - y) <= SEAM_SNAP) y = near;
+    el.style.top = `${Math.round(y)}px`;
+  });
+}
+
+// Pause each drifting background current while it is off screen
+// (CSS only runs the drift on elements marked .in-view)
+const driftObserver = 'IntersectionObserver' in window
+  ? new IntersectionObserver((entries) => {
     entries.forEach((entry) => entry.target.classList.toggle('in-view', entry.isIntersecting));
-  }, { rootMargin: '100px 0px' });
+  }, { rootMargin: '100px 0px' })
+  : null;
 
-  driftSections.forEach((section) => driftObserver.observe(section));
-} else {
-  driftSections.forEach((section) => section.classList.add('in-view'));
+document.querySelectorAll('.hero, .current').forEach((el) => {
+  if (driftObserver) driftObserver.observe(el);
+  else el.classList.add('in-view');
+});
+
+if (currentsLayer && heroEl && footerEl) {
+  placeCurrents();
+  if ('ResizeObserver' in window) new ResizeObserver(placeCurrents).observe(document.body);
+  else window.addEventListener('resize', placeCurrents);
 }
 
 // Expandable entries in the About info panel
