@@ -1,8 +1,8 @@
 /* ==========================================================================
    Design tokens
-   Palette: black / charcoal, violet-purple as the main accent and
-   blue-violet as its complement. No pink, magenta or pastel lavender:
-   every accent sits between ~228° (blue) and ~266° (purple).
+   Palette: black / charcoal, violet-purple as the main accent and cyan as
+   its complement, joined by one purple-to-cyan gradient. No pink or
+   magenta: accents run from cyan (~197°) to purple (~264°).
    ========================================================================== */
 :root {
   --bg: #08080c;
@@ -13,12 +13,10 @@
   --surface-2: #15131e;
   --surface-3: #1c1929;
 
-  /* Purple is the defining accent; blue-violet is its complement */
-  --violet: #8b5cf6;
-  --violet-deep: #7048e8;
+  /* Purple is the defining accent; cyan is its complement */
+  --violet: #904af9;
   --violet-soft: #a78bfa;
-  --blue: #818cf8;
-  --blue-deep: #5b5bd6;
+  --blue: #66d4ff;
   --accent-text: #a78bfa;
 
   --text: #eeeef4;
@@ -28,17 +26,15 @@
   --line: rgba(167, 139, 250, 0.11);
   --line-strong: rgba(167, 139, 250, 0.22);
 
-  /* One purple-to-blue pair for every gradient. The ends sit wider apart than
-     --violet/--blue (~266deg vs ~228deg) or the shift is invisible. */
-  --text-grad-from: #a35cff;
-  --text-grad-to: #6f8cff;
+  /* One purple-to-cyan pair for every gradient: text, lines and fills */
+  --text-grad-from: var(--violet);
+  --text-grad-to: var(--blue);
   --grad-text: linear-gradient(100deg, var(--text-grad-from) 0%, var(--text-grad-from) 15%, var(--text-grad-to) 100%);
-  /* Same purple-to-blue for thin accent lines */
+  /* Same pair for thin accent lines */
   --grad-line: linear-gradient(90deg, var(--text-grad-from), var(--text-grad-to));
-  /* Darker version of the same pair for fills behind white text
-     (both ends keep white text above 4.5:1) */
-  --grad-fill: linear-gradient(135deg, #8a3ffc 0%, #4f6bf0 100%);
-  --grad-hairline: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45) 30%, rgba(129, 140, 248, 0.4) 70%, transparent);
+  /* Fills (button, icons, logo mark) use the same pair as the text */
+  --grad-fill: linear-gradient(135deg, var(--text-grad-from) 0%, var(--text-grad-to) 100%);
+  --grad-hairline: linear-gradient(90deg, transparent, rgba(167, 139, 250, 0.45) 30%, rgba(102, 212, 255, 0.4) 70%, transparent);
 
   --wrap: 1080px;
   --gutter: 2rem;
@@ -88,7 +84,7 @@ h3 {
 }
 
 ::selection {
-  background-color: rgba(129, 140, 248, 0.4);
+  background-color: rgba(102, 212, 255, 0.4);
   color: #ffffff;
 }
 
@@ -123,7 +119,7 @@ body > header {
   border-radius: 2px;
   background: var(--grad-fill);
   transform: rotate(45deg);
-  box-shadow: 0 0 12px rgba(138, 63, 252, 0.6);
+  box-shadow: 0 0 12px rgba(144, 74, 249, 0.6);
 }
 
 #site-nav ul {
@@ -541,7 +537,7 @@ body {
   padding: 6.5rem var(--gutter) 6rem;
 }
 
-/* Lighting: blue-violet glow behind the mascot, fading out to the page */
+/* Lighting: soft cyan glow behind the mascot, fading out to the page */
 .hero::before,
 .hero::after {
   content: "";
@@ -560,7 +556,7 @@ body {
   -webkit-mask-image: linear-gradient(180deg, #000 65%, transparent);
   mask-image: linear-gradient(180deg, #000 65%, transparent);
   background:
-    radial-gradient(ellipse 45% 55% at 12% 95%, rgba(129, 140, 248, 0.09), transparent 70%),
+    radial-gradient(ellipse 45% 55% at 12% 95%, rgba(102, 212, 255, 0.09), transparent 70%),
     radial-gradient(ellipse 50% 60% at 10% 100%, rgba(30, 27, 46, 0.55), transparent 70%);
 }
 
@@ -645,7 +641,7 @@ body {
   width: fit-content;
   max-width: 100%;
   filter:
-    drop-shadow(0 0 14px rgba(138, 63, 252, 0.35))
+    drop-shadow(0 0 14px rgba(144, 74, 249, 0.35))
     drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55));
 }
 
@@ -885,7 +881,7 @@ body {
   margin: 0.5rem 0 0;
   padding: 0.35rem 1.35rem;
   background:
-    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(129, 140, 248, 0.1), transparent 70%),
+    radial-gradient(ellipse 80% 60% at 100% 0%, rgba(102, 212, 255, 0.1), transparent 70%),
     linear-gradient(180deg, var(--surface-2), var(--surface-1));
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -997,7 +993,7 @@ body {
   border-radius: 20px;
   background:
     linear-gradient(180deg, rgba(22, 20, 32, 0.92), rgba(11, 10, 16, 0.96)) padding-box,
-    linear-gradient(150deg, rgba(167, 139, 250, 0.45), rgba(129, 140, 248, 0.18) 35%, rgba(167, 139, 250, 0.06) 70%) border-box;
+    linear-gradient(150deg, rgba(167, 139, 250, 0.45), rgba(102, 212, 255, 0.18) 35%, rgba(167, 139, 250, 0.06) 70%) border-box;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
 }
 
@@ -1016,9 +1012,9 @@ body {
   color: var(--accent-text);
   margin-bottom: 0.9rem;
   padding: 0.3rem 0.75rem;
-  border: 1px solid rgba(129, 140, 248, 0.35);
+  border: 1px solid rgba(102, 212, 255, 0.35);
   border-radius: 999px;
-  background-color: rgba(129, 140, 248, 0.08);
+  background-color: rgba(102, 212, 255, 0.08);
 }
 
 .project-label::before {
@@ -1316,7 +1312,7 @@ body {
 }
 
 .more-list li:hover {
-  border-color: rgba(129, 140, 248, 0.5);
+  border-color: rgba(102, 212, 255, 0.5);
   color: var(--text);
 }
 
@@ -1451,7 +1447,7 @@ body {
   background:
     radial-gradient(ellipse 60% 120% at 0% 50%, rgba(139, 92, 246, 0.16), transparent 70%) padding-box,
     linear-gradient(180deg, var(--surface-2), var(--surface-1)) padding-box,
-    linear-gradient(120deg, rgba(167, 139, 250, 0.4), rgba(129, 140, 248, 0.15) 50%, rgba(167, 139, 250, 0.06)) border-box;
+    linear-gradient(120deg, rgba(167, 139, 250, 0.4), rgba(102, 212, 255, 0.15) 50%, rgba(167, 139, 250, 0.06)) border-box;
 }
 
 /* Code glyph badge */
@@ -1466,7 +1462,7 @@ body {
   height: 3rem;
   border-radius: 12px;
   background: var(--grad-fill);
-  box-shadow: 0 8px 24px rgba(138, 63, 252, 0.3);
+  box-shadow: 0 8px 24px rgba(144, 74, 249, 0.3);
   font-family: Consolas, "SF Mono", Menlo, monospace;
   font-size: 0.95rem;
   font-weight: 700;
@@ -1736,7 +1732,7 @@ body {
 .contact-card:focus-visible {
   background:
     linear-gradient(180deg, var(--surface-2), var(--surface-1)) padding-box,
-    linear-gradient(150deg, rgba(167, 139, 250, 0.6), rgba(129, 140, 248, 0.3)) border-box;
+    linear-gradient(150deg, rgba(167, 139, 250, 0.6), rgba(102, 212, 255, 0.3)) border-box;
   box-shadow: 0 16px 44px rgba(139, 92, 246, 0.15);
   transform: translateY(-3px);
 }
@@ -1850,7 +1846,7 @@ body {
 .btn-primary {
   background: var(--grad-fill);
   color: #ffffff;
-  box-shadow: 0 8px 24px rgba(138, 63, 252, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 24px rgba(144, 74, 249, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:hover,
@@ -1867,7 +1863,7 @@ body {
 .btn-secondary:hover,
 .btn-secondary:focus-visible {
   border-color: var(--violet);
-  background-color: rgba(129, 140, 248, 0.08);
+  background-color: rgba(102, 212, 255, 0.08);
   color: #ffffff;
 }
 
@@ -1996,7 +1992,7 @@ a.logo:focus-visible {
   transform: translateX(-50%);
   background:
     radial-gradient(ellipse 40% 70% at 50% 0%, rgba(139, 92, 246, 0.14), transparent 70%),
-    radial-gradient(ellipse 25% 50% at 72% 0%, rgba(129, 140, 248, 0.1), transparent 70%),
+    radial-gradient(ellipse 25% 50% at 72% 0%, rgba(102, 212, 255, 0.1), transparent 70%),
     linear-gradient(180deg, var(--surface-0), transparent);
   pointer-events: none;
 }
@@ -2215,7 +2211,7 @@ a.logo:focus-visible {
   padding: 0.9rem 1rem;
   border: 1px solid var(--violet);
   border-radius: 8px;
-  background-color: rgba(129, 140, 248, 0.05);
+  background-color: rgba(102, 212, 255, 0.05);
 }
 
 @media (max-width: 768px) {
