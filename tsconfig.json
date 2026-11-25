@@ -1,0 +1,31 @@
+{
+  // Compiles src/script.ts to script.js in the repository root. script.js is
+  // generated but committed, so the site works from a plain checkout on any
+  // static host. Edit src/script.ts, never script.js, then run npm run build.
+  //
+  // script.js is a classic browser script loaded with <script src>, not a
+  // module. moduleDetection "legacy" makes TypeScript treat a file as a module
+  // only if it has import/export, so the output never gains "export {}".
+  // Keep src/script.ts free of import/export.
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": [],
+    "module": "ESNext",
+    "moduleDetection": "legacy",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "rootDir": "src",
+    "outDir": ".",
+    "newLine": "lf",
+    "removeComments": false,
+    "sourceMap": false
+  },
+  "include": ["src/**/*.ts"],
+  // Explicit, because the default exclude contains outDir, which is the
+  // repository root here and would exclude src/ as well.
+  "exclude": ["node_modules"]
+}
