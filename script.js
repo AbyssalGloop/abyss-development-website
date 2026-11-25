@@ -29,20 +29,28 @@ window.addEventListener('scroll', () => {
         scrollIdleTimer = null;
     }, 150);
 }, { passive: true });
-// Space the page-wide currents evenly from the end of the hero down to the
-// footer, about one every CURRENT_SPACING px, adding or removing currents to
-// fit the page height. A current that lands near a seam between sections
-// (where the section padding leaves empty space) snaps onto it.
+// Space the page-wide currents evenly from the end of the hero (on the legal
+// pages: the end of the page title block) down to the footer, about one every
+// CURRENT_SPACING px, adding or removing currents to fit the page height.
+// A current that lands near a seam between sections (where the section
+// padding leaves empty space) snaps onto it.
 // Re-placed whenever the page height changes.
 const currentsLayer = document.querySelector('.currents');
 const heroEl = document.querySelector('.hero');
+const legalHeadEl = document.querySelector('.legal-head');
 const footerEl = document.querySelector('.site-footer');
 const seams = [...document.querySelectorAll('body > section:not(.hero), body > footer')];
 const CURRENT_SPACING = 800;
 const SEAM_SNAP = 220;
-// Only called once currentsLayer, heroEl and footerEl are known to exist (see below).
+// Only called once currentsLayer and footerEl are known to exist (see below).
 function placeCurrents() {
-    const start = heroEl.offsetTop + heroEl.offsetHeight;
+    // The title block sits inside <main>, so its offsetTop is relative to <main>;
+    // measure it against <body>, which holds the currents layer.
+    const start = heroEl
+        ? heroEl.offsetTop + heroEl.offsetHeight
+        : legalHeadEl
+            ? legalHeadEl.getBoundingClientRect().bottom - document.body.getBoundingClientRect().top
+            : 0;
     const end = footerEl.offsetTop;
     const count = Math.max(2, Math.round((end - start) / CURRENT_SPACING) + 1);
     const step = (end - start) / (count - 1);
@@ -80,7 +88,7 @@ document.querySelectorAll('.hero, .current').forEach((el) => {
     else
         el.classList.add('in-view');
 });
-if (currentsLayer && heroEl && footerEl) {
+if (currentsLayer && footerEl) {
     placeCurrents();
     // The "in" check narrows window to never in the else branch; the cast undoes that.
     if ('ResizeObserver' in window)

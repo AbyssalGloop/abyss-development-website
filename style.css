@@ -1411,8 +1411,12 @@ body {
   opacity: 1;
 }
 
+/* Small Gloock heading: open the tracking and word spacing (as on the legal
+   pages), or the letters run together */
 .service-card h3 {
   font-size: 1.2rem;
+  letter-spacing: 0.015em;
+  word-spacing: 0.08em;
   margin: 0 0 0.7rem;
 }
 
@@ -1591,8 +1595,11 @@ body {
   border-top: 1px solid var(--line);
 }
 
+/* Small Gloock heading: same spacing fix as .service-card h3 */
 .pricing h3 {
   font-size: 1.1rem;
+  letter-spacing: 0.015em;
+  word-spacing: 0.08em;
   margin: 0 0 0.35rem;
 }
 
@@ -1971,7 +1978,8 @@ a.logo:focus-visible {
 
 /* ==========================================================================
    Legal pages: static, no reveal animations, comfortable reading width.
-   Same palette, but only a quiet header glow so the text stays the focus.
+   Same palette and the same page-wide drifting currents as the homepage
+   (no extra glows), so the text stays the focus.
    ========================================================================== */
 .legal {
   position: relative;
@@ -1979,22 +1987,6 @@ a.logo:focus-visible {
   max-width: 760px;
   margin: 0 auto;
   padding: 4.5rem var(--gutter) 6rem;
-}
-
-.legal::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  top: 0;
-  left: 50%;
-  width: 100vw;
-  height: 26rem;
-  transform: translateX(-50%);
-  background:
-    radial-gradient(ellipse 40% 70% at 50% 0%, rgba(139, 92, 246, 0.14), transparent 70%),
-    radial-gradient(ellipse 25% 50% at 72% 0%, rgba(102, 212, 255, 0.1), transparent 70%),
-    linear-gradient(180deg, var(--surface-0), transparent);
-  pointer-events: none;
 }
 
 .legal-head {
@@ -2013,7 +2005,10 @@ a.logo:focus-visible {
 .legal-head h1 {
   font-size: clamp(2rem, 4vw, 2.75rem);
   line-height: 1.1;
-  letter-spacing: -0.025em;
+  /* Gloock is a display face: tight tracking only works at large sizes, and
+     its narrow word space needs a little help at this size */
+  letter-spacing: -0.005em;
+  word-spacing: 0.05em;
   margin: 0 0 1rem;
 }
 
@@ -2041,7 +2036,8 @@ a.logo:focus-visible {
 }
 
 .legal-toc h2 {
-  font-size: 1rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.015em;
   margin: 0 0 0.75rem;
   color: #ffffff;
 }
@@ -2086,9 +2082,13 @@ a.logo:focus-visible {
   scroll-margin-top: 1.5rem;
 }
 
+/* Small Gloock headings: open the tracking and word spacing, or the letters
+   run together */
 .legal-section h2 {
   font-size: 1.35rem;
   line-height: 1.3;
+  letter-spacing: 0.015em;
+  word-spacing: 0.08em;
   margin: 0 0 1.1rem;
   padding-bottom: 0.6rem;
   border-bottom: 1px solid var(--line);
@@ -2253,7 +2253,7 @@ a.logo:focus-visible {
   .site-footer,
   .legal-toc,
   .legal-top,
-  .legal::before {
+  .currents {
     display: none;
   }
 
